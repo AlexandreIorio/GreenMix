@@ -3,10 +3,15 @@ package ch.heig.Garden;
 import io.javalin.Javalin;
 
 public class PlantationController {
+    // region public Const
     public static final int PORT = 8080;
+    // endregion
 
+
+    // region Public Methods
     public static void growPlant(Customer customer, PlantType type) {
         // TODO WSI : Passer par des const pour éviter d'instancier la plante dès le début
+        // TODO WSI : Edit faire comme dans useReductoPotion
         Plant plant = new Plant(type);
 
         if (customer.getWallet() < plant.getPurchasePrice()) {
@@ -31,7 +36,18 @@ public class PlantationController {
         }
     }
 
+    public static void useReductoPotion(Customer customer, int plantId) {
+        Plant plant = customer.getPlantById(plantId);
+        customer.useTimeReductionPotion(plant);
+    }
 
+    public static void useMultiplicarePotion(Customer customer, int plantId) {
+        Plant plant = customer.getPlantById(plantId);
+        customer.useHarvestMultiplierPotion(plant);
+    }
+    // endregion
+
+    // region Main with HTTP Request
     public static void main(String[] args) {
         Javalin app = Javalin.create().start(PORT);
         Customer customer = new Customer(5.0);
@@ -44,10 +60,23 @@ public class PlantationController {
 
         app.get("/garden", ctx -> ctx.json(customer.getPlants()));
 
-        app.get("/harvest/{id}",ctx -> {
-            int id = Integer.parseInt(ctx.pathParam("id"));
+        app.get("/harvest/{plantId}",ctx -> {
+            int id = Integer.parseInt(ctx.pathParam("plantId"));
             PlantationController.harvestPlant(customer, id);
             ctx.result("Récolte effectuée!");
         });
+
+        app.get("/reducto/{plantId}", ctx -> {
+            int plantId = Integer.parseInt(ctx.pathParam("plantId"));
+            PlantationController.useReductoPotion(customer, plantId);
+            ctx.result("Potion utilisée avec succès!");
+        });
+
+        app.get("/multiplicare/{plantId}", ctx -> {
+            int plantId = Integer.parseInt(ctx.pathParam("plantId"));
+            PlantationController.useMultiplicarePotion(customer, plantId);
+            ctx.result("Potion utilisée avec succès!");
+        });
     }
+    // endregion
 }

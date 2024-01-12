@@ -13,6 +13,10 @@ public class Plant {
 
     private boolean hasGrown; // indique si la plante a finit de pousser
 
+    // TODO WSI : Les facteurs doivent être en double vrmt force au schedule (duration aussi)
+    private int timeReductionFactor; // facteur de réduction du temps => potion Reducto
+    private int harvestMultiplier; // facteur de multiplication des récoltes => potion Multiplicare
+
     private static int nb;
     private final int id = nb++;
     // endregion
@@ -23,7 +27,7 @@ public class Plant {
     }
     // endregion
 
-    // region Public Method
+    // region Public Methods
     public void grow() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -48,6 +52,17 @@ public class Plant {
         }
     }
 
+    // TODO WSI : A tester
+    public void reduceGrowTime() {
+        this.duration /= timeReductionFactor;
+        System.out.println("Temps de pousse réduit!");
+    }
+
+    public void multiplyHarvest() {
+        this.harvest *= harvestMultiplier;
+        System.out.println("Nombre de récolte multiplié!");
+    }
+
     public int getHarvest() {
         return harvest;
     }
@@ -65,7 +80,7 @@ public class Plant {
     }
     // endregion
 
-    // region Private Method
+    // region Private Methods
     private void CreatePlant(PlantType type) {
         switch (type) {
             case A:
@@ -95,7 +110,10 @@ public class Plant {
         this.purchasePrice = purchasePrice;
         this.sellingPrice = sellingPrice;
         this. duration = duration;
+
         this.hasGrown = false;
+        this.harvestMultiplier = 2;
+        this.timeReductionFactor = 2;
     }
     // endregion
 }
