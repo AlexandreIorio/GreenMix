@@ -12,9 +12,12 @@
 
 You will have to be connected to the
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
-It is mandatory.
+It is mandatory. Then, in your terminal, run the following command:
 
-- terminal: ssh heiguser@10.190.132.59 
+```sh
+ssh heiguser@10.190.132.59 
+```
+
 - username: heiguser
 - password: FTNXzTNJau3cskpc967l
 
