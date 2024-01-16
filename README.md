@@ -1,5 +1,9 @@
 ## Group composition and roles
 
+<br>
+
+---
+
 ## How to install and configure the server
 
 <br>
@@ -10,13 +14,13 @@ You will have to be connected to the
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
 It is mandatory.
 
-- terminal connexion: ssh heiguser@10.190.132.59 
+- terminal: ssh heiguser@10.190.132.59 
 - username: heiguser
 - password: FTNXzTNJau3cskpc967l
 
 <br>
 
-#### Update the virtual machine and install `apache2-utils`
+#### Update the virtual machine
 
 Once you have access to the virtual machine, you can update it with the
 following commands:
@@ -33,7 +37,7 @@ This will ensure that the virtual machine is up-to-date.
 
 <br>
 
-#### Install `apache2-utils` with the following command:
+#### Install `apache2-utils`:
 
 ```sh
 # Install apache2-utils
@@ -45,20 +49,64 @@ users for the Traefik dashboard in a future step.
 
 <br>
 
-#### Install Docker and Docker Compose on the virtual machine
+#### Install Docker using the apt repository:
 
-Install Docker and Docker Compose as seen in the
-[Docker and Docker Compose](https://github.com/heig-vd-dai-course/heig-vd-dai-course/tree/main/10-docker-and-docker-compose)
-chapter.
+1. Set up Docker's apt repository:
 
-As the virtual machine is running Linux, follow the instructions for Linux. Do
-not forget the post-installation steps. This will ensure that Docker and Docker
-Compose start automatically when the virtual machine is rebooted and that you
-can use Docker without the need of using `sudo` (= admin) each time.
+```sh
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-Check that you can run the `hello-world` Docker image as seen in the Docker and
-Docker Compose chapter to ensure you can use Docker on the virtual machine
-without the need of `sudo`.
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+2. Install the Docker packages:
+
+```sh
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+3. Verify that the Docker Engine installation is successful by running the hello-world image.
+
+```sh
+sudo docker run hello-world
+```
+
+<br>
+
+#### Linux post-installation steps for Docker Engine:
+
+<br>
+
+#### Install Docker Compose using the repository:
+
+1. Update the package index, and install the latest version of Docker Compose:
+
+```sh
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+```
+
+2. Verify that Docker Compose is installed correctly by checking the version.
+
+```sh
+docker compose version
+```
+
+Expected output:
+
+```sh
+Docker Compose version vN.N.N
+```
 
 <br>
 
