@@ -83,9 +83,7 @@ sudo docker run hello-world
 
 <br>
 
-#### Linux post-installation steps for Docker Engine:
-
-Manage Docker as a non-root user:
+#### Linux post-installation steps for Docker Engine (manage Docker as a non-root user):
 
 1. Create the docker group:
 
