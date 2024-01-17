@@ -1,3 +1,17 @@
+![header](https://capsule-render.vercel.app/api?type=waving&height=150&color=38761d&text=Green%20Mix&fontColor=E8F4FF)
+
+*Green Mix: Where you can grow your virtual garden and watch your green thumb thrive!*
+
+<div>
+<img src="https://img.shields.io/github/last-commit/AlexandreIorio/GreenMix?style=flat-square&color=5D6D7E" alt="git-last-commit" />
+<img src="https://img.shields.io/github/commit-activity/m/AlexandreIorio/GreenMix?style=flat-square&color=5D6D7E" alt="GitHub commit activity" />
+<img src="https://img.shields.io/github/languages/top/AlexandreIorio/GreenMix?style=flat-square&color=5D6D7E" alt="GitHub top language" />
+</div>
+
+## 🚀 Green Mix: Overview
+
+Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
+
 ## Group composition and roles
 
 <br>
