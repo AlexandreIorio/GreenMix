@@ -96,23 +96,23 @@ public class Plant {
     // region Private Methods
     private void CreatePlant(PlantType type) {
         switch (type) {
-            case A:
+            case BITBUD:
                 initializePlant(3, 3, 5, 5.);
                 break;
 
-            case B:
+            case DEBUGDREAM:
                 initializePlant(1, 8, 11, 15.);
                 break;
 
-            case C:
+            case HASHHACK:
                 initializePlant(2, 5, 9, 10.);
                 break;
 
-            case D:
+            case BYTEBLOOM:
                 initializePlant(1, 10, 14, 20.);
                 break;
 
-            case E:
+            case KERNELHAZE:
                 initializePlant(1, 15, 21, 30.);
                 break;
         }
