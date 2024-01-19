@@ -84,7 +84,7 @@ public class Customer {
 
     public void addPlantToGarden(Plant plant) {
         for (int i = 0; i < plants.length; ++ i) {
-            if (plants[i] != null) {
+            if (plants[i] == null) {
                 plants[i] = plant;
                 break;
             }
