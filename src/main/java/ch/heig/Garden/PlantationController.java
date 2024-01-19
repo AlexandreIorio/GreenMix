@@ -33,6 +33,24 @@ public class PlantationController {
         Javalin app = Javalin.create().start(PORT);
         Customer customer = new Customer("Walid",5.0);
 
+        // Customer
+        app.get("/profile", ctx -> {
+            ctx.json(customer);
+        });
+
+        app.post("/profile/wallet/{money}", ctx -> {
+            customer.addMoney(Double.parseDouble(ctx.pathParam("money")));
+        });
+
+        app.put("/profile/update/{username}", ctx -> {
+            customer.updateUsername(ctx.pathParam("username"));
+        });
+
+        app.delete("/profile/tools/{tool}", ctx -> {
+            customer.deleteTool(ctx.pathParam("tool"));
+        });
+
+        // Plantation
         app.get("/grow/{plantType}",ctx -> {
             PlantType type = PlantType.valueOf(ctx.pathParam("plantType").toUpperCase());
             if (growPlant(customer, type)) {
@@ -69,17 +87,6 @@ public class PlantationController {
 
         app.get("/garden", ctx -> ctx.json(customer.getPlants()));
 
-        app.post("/wallet/{money}", ctx -> {
-            customer.addMoney(Double.parseDouble(ctx.pathParam("money")));
-        });
-
-        app.put("/profile/{username}", ctx -> {
-            customer.updateUsername(ctx.pathParam("username"));
-        });
-
-        app.delete("/tools/{tool}", ctx -> {
-            customer.deleteTool(ctx.pathParam("tool"));
-        });
     }
     // endregion
 }

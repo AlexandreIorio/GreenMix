@@ -11,8 +11,6 @@ public class Customer {
     // endregion
 
     // region Private Parameters
-    private static int nb;
-    private final int id = nb++;
     private String username;
     private double wallet;
     private final Plant[] plants;
@@ -21,7 +19,7 @@ public class Customer {
 
     // region Ctor
     public Customer(String username, double wallet) {
-        this.username = username + id;
+        this.username = username;
         this.wallet = wallet;
         this.plants = new Plant[MAX_PLANTS];
         this.tools.add(new Tool("Fourche"));
@@ -30,6 +28,38 @@ public class Customer {
     // endregion
 
     // region Public Methods
+
+    // Getter method
+    public String getUsername(){
+        return username;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public Plant[] getPlants() {
+        return plants;
+    }
+
+    public List<Tool> getTools(){
+        return tools;
+    }
+
+    // API method
+    public void addMoney(double money){
+        wallet += money;
+    }
+
+    public void updateUsername(String username){
+        this.username = username;
+    }
+
+    public boolean deleteTool(String toolName) {
+        return tools.removeIf(tool -> tool.getName().equals(toolName));
+    }
+
+    // Plantation method
     public boolean plantPlant(Plant plant) {
         if (wallet < plant.getPurchasePrice()) {
             return false;
@@ -65,14 +95,6 @@ public class Customer {
         }
     }
 
-    public double getWallet() {
-        return wallet;
-    }
-
-    public Plant[] getPlants() {
-        return plants;
-    }
-
     public Plant getPlantById(int targetId) {
         for (Plant plant : plants) {
             if (plant.getId() == targetId) {
@@ -98,18 +120,6 @@ public class Customer {
                 break;
             }
         }
-    }
-
-    public void addMoney(double money){
-        wallet += money;
-    }
-
-    public void updateUsername(String username){
-        username = username + id;
-    }
-
-    public boolean deleteTool(String toolName) {
-        return tools.removeIf(tool -> tool.getName().equals(toolName));
     }
     // endregion
 }
