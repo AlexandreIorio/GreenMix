@@ -16,7 +16,7 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 ---
 
-## What the web application is for and its API
+## What the web application is for
 
 The web application provides an immersive virtual gardening experience, 
 combining educational content with engaging activities like planting and harvesting. 
@@ -38,6 +38,12 @@ strategic resource management.
 
 4. **Interactive Garden Management**
     - Lets users design and manage their virtual garden, making decisions on plant placement and resource use.
+
+<br>
+
+---
+
+## API
 
 ### Customer
 
