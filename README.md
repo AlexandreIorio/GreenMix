@@ -344,6 +344,25 @@ configuration.
 
 <br>
 
+### Run it with docker compose
+
+1. **Running with Docker Compose**:
+
+In the directory containing your `docker-compose.yml`, start the services. This will pull the images from github and start the server and clients.
+```bash
+docker-compose up
+```
+
+2. **Interacting with the Application**:
+
+
+3. **Shutting Down the Application**:
+```bash
+docker-compose down
+```
+
+<br>
+
 ---
 
 ## How to build and publish the web application with Docker
@@ -390,41 +409,6 @@ After building the images, you can publish them to github. Be sure to be logged 
 docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 ```
 
-<br>
-
-### Run it directly via Docker
-
-First you must pull the image.
-
-```sh
-docker pull ghcr.io/theodrosrun/greenmix:v1.0.0
-```
-
-Then, execute the following command with the desired options:
-
-```sh
-docker run ghcr.io/theodrosrun/greenmix:v1.0.0
-```
-
-<br>
-
-### Run it with docker compose
-
-1. **Running with Docker Compose**:
-
-In the directory containing your `docker-compose.yml`, start the services. This will pull the images from github and start the server and clients.
-```bash
-docker-compose up
-```
-
-2. **Interacting with the Application**:
-
-
-3. **Shutting Down the Application**:
-```bash
-docker-compose down
-```
-      
 <br>
 
 ---
