@@ -26,7 +26,7 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 <br>
 
-#### Access the virtual machine
+### Access the virtual machine
 
 1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
@@ -43,7 +43,7 @@ Other information:
 
 <br>
 
-#### Update the virtual machine
+### Update the virtual machine
 
 Once you have access to the virtual machine, you can update it with the
 following commands:
@@ -60,7 +60,7 @@ This will ensure that the virtual machine is up-to-date.
 
 <br>
 
-#### Install `apache2-utils`:
+### Install `apache2-utils`:
 
 ```sh
 # Install apache2-utils
@@ -72,7 +72,7 @@ users for the Traefik dashboard in a future step.
 
 <br>
 
-#### Install Docker using the apt repository:
+### Install Docker using the apt repository:
 
 1. Set up Docker's apt repository:
 
@@ -106,7 +106,7 @@ sudo docker run hello-world
 
 <br>
 
-#### Linux post-installation steps for Docker Engine (manage Docker as a non-root user):
+### Linux post-installation steps for Docker Engine (manage Docker as a non-root user):
 
 1. Create the docker group:
 
@@ -132,7 +132,7 @@ docker run hello-world
 
 <br>
 
-#### Install Docker Compose using the repository:
+### Install Docker Compose using the repository:
 
 1. Update the package index, and install the latest version of Docker Compose:
 
@@ -155,7 +155,7 @@ Docker Compose version vN.N.N
 
 <br>
 
-#### Clone the repository on the virtual machine with https
+### Clone the repository on the virtual machine with https
 
 ```sh
 git clone https://github.com/AlexandreIorio/GreenMix.git
@@ -169,8 +169,96 @@ configuration.
 
 ## How to deploy, run and access the web application
 
+<br>
+
+---
+
 ## How to configure the DNS zone to access the web application
 
+<br>
+
+---
+
 ## How to build and publish the web application with Docker
+
+### Clone and build the repository.
+
+1. Clone the repository:
+```sh
+git clone https://github.com/AlexandreIorio/GreenMix.git
+```
+
+2. Change to the project directory:
+```sh
+cd GreenMix
+```
+
+3. Build the web application:
+```sh
+# Download the dependencies
+./mvnw dependency:resolve clean compile
+
+# Package the application
+./mvnw package
+```
+
+<br>
+
+### Once the Jar are generated, you can build the docker images.
+
+1. Navigate to the server's directory. 
+2. Build the image using the Docker build command.
+  ```bash
+  docker build -t ghcr.io/theodrosrun/greenmix:v1.0.0 .
+  ```
+be sure to adapt the version number as needed.
+
+<br>
+
+### Publishing to GitHub
+
+After building the images, you can publish them to github. Be sure to be logged and have right to publish image.
+
+Once done, you can publish it to github by using :
+
+```sh
+docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
+```
+
+<br>
+
+### Run it directly via Docker
+
+To run the application without docker compose follow the guide :
+
+First you must pull the image.
+
+```sh
+docker pull ghcr.io/theodrosrun/greenmix:v1.0.0
+```
+
+<br>
+
+### Run it with docker compose
+
+1. **Running with Docker Compose**:
+
+In the directory containing your `docker-compose.yml`, start the services. This will pull the images from github and start the server and clients.
+```bash
+docker-compose up
+```
+
+2. **Interacting with the Application**:
+
+
+
+3. **Shutting Down the Application**:
+```bash
+docker-compose down
+```
+      
+<br>
+
+---
 
 ## How to interact with the web application with examples and outputs using curl
