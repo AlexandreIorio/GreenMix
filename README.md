@@ -154,7 +154,7 @@ strategic resource management.
     - Responsibilities:
         - Development of server-side logic and database.
         - Implementation of the CRUD API on the virtual machine.
-        - Collaboration with the Front-end Developer for API integration.
+        - Collaboration for API integration.
 
 <br>
 
