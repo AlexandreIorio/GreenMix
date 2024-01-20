@@ -27,15 +27,9 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
 
-2. In your terminal, run the following command:
+2. In your terminal, run the following command: __ssh heiguser@10.190.132.59__
 
-```sh
-ssh heiguser@10.190.132.59 
-```
-3. Then enter the password: FTNXzTNJau3cskpc967l
-
-<br>
-
+3. Then enter the password: __FTNXzTNJau3cskpc967l__
 
 Other information:
 - Hostname: IICT-MV358-DAI 
