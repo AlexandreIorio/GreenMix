@@ -251,9 +251,7 @@ be sure to adapt the version number as needed.
 
 ### Publishing to GitHub
 
-After building the images, you can publish them to github. Be sure to be logged and have right to publish image.
-
-Once done, you can publish it to github by using :
+After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
 
 ```sh
 docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
