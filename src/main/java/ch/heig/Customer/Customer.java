@@ -22,8 +22,8 @@ public class Customer {
         this.username = username;
         this.wallet = wallet;
         this.plants = new Plant[MAX_PLANTS];
-        this.tools.add(new Tool("Fourche"));
-        this.tools.add(new Tool("Cisaille"));
+        this.tools.add(new Tool("FOURCHE"));
+        this.tools.add(new Tool("CISAILLE"));
     }
     // endregion
 
@@ -56,7 +56,7 @@ public class Customer {
     }
 
     public boolean deleteTool(String toolName) {
-        return tools.removeIf(tool -> tool.getName().equals(toolName));
+        return tools.removeIf(tool -> tool.getName().equals(toolName.toUpperCase()));
     }
 
     // Plantation method
@@ -97,11 +97,11 @@ public class Customer {
 
     public Plant getPlantById(int targetId) {
         for (Plant plant : plants) {
-            if (plant.getId() == targetId) {
+            if (plant != null && plant.getId() == targetId) {
                 return plant;
             }
         }
-        throw new ArrayStoreException("Pas de plante avec l'id demandé");
+        return null;
     }
 
     public void addPlantToGarden(Plant plant) {
