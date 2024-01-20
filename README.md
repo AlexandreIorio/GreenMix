@@ -169,9 +169,17 @@ strategic resource management.
 1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
 
-2. In your terminal, run the following command: __ssh heiguser@10.190.132.59__
+2. Login
 
-3. Then enter the password: __FTNXzTNJau3cskpc967l__
+Option 1: SSH with password 
+- In your terminal: __ssh heiguser@10.190.132.59__
+- Then enter the password: __FTNXzTNJau3cskpc967l__
+
+Option 2: SSH without password
+- In your terminal: __ssh -i C:\path\to\public_key heiguser@10.190.132.59__
+- Then enter the password: __press enter__
+
+<br>
 
 Other information:
 - Hostname: IICT-MV358-DAI 
