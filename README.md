@@ -8,9 +8,16 @@
 <img src="https://img.shields.io/github/languages/top/AlexandreIorio/GreenMix?style=flat-square&color=5D6D7E" alt="GitHub top language" />
 </div>
 
-## 🚀 Green Mix: Overview
+# Table of Contents
 
-Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
+- [1. What the Web Application is For](#what-the-web-application-is-for)
+- [2. API](#API)
+- [3. Group composition and roles](#Group-composition-and-roles)
+- [4. How to install and configure the server](#How-to-install-and-configure-the-server)
+- [5. How to deploy, run and access the web application](#How-to-deploy-run-and-access-the-web-application)
+- [6. How to configure the DNS zone to access the web application](#How-to-configure-the-DNS-zone-to-access-the-web-application)
+- [7. How to build and publish the web application with Docker](#How-to-build-and-publish-the-web-application-with-Docker)
+- [8. How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
 
 <br>
 
