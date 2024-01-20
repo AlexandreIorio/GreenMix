@@ -12,6 +12,10 @@
 
 Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
+<br>
+
+---
+
 ## Group composition and roles
 
 <br>
