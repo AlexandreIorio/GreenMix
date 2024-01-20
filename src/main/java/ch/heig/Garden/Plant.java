@@ -2,9 +2,10 @@ package ch.heig.Garden;
 
 import ch.heig.Potion.MultiplicarePotion;
 import ch.heig.Potion.ReductoPotion;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class Plant {
     // region Private Parameters
@@ -19,7 +20,11 @@ public class Plant {
     private static int nb;
     private final int id = nb++;
 
-    private Timer timer;
+    //private Timer timer;
+    private ScheduledExecutorService scheduler;
+    private ScheduledFuture<?> growFuture;
+
+    private String type;
     // endregion
 
     // region Ctor
@@ -30,14 +35,11 @@ public class Plant {
 
     // region Public Methods
     public void grow() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // Logique de croissance ici
-                hasGrown = true;
-            }
-        }, (long) (duration * 1000));
+        scheduler = Executors.newScheduledThreadPool(1);
+        growFuture = scheduler.schedule(() -> {
+            // Logique de croissance ici
+            hasGrown = true;
+        }, (long) (duration * 1000), TimeUnit.MILLISECONDS);
     }
 
     public boolean canHarvest() {
@@ -51,29 +53,27 @@ public class Plant {
     }
 
     public void reduceGrowTime(ReductoPotion reductoPotion) {
-        this.duration *= reductoPotion.getGrowthReductionFactor();
-
-        if (!hasGrown) {
-            resetTimer();
+        if (!hasGrown && growFuture != null) {
+            long timeRemaining = growFuture.getDelay(TimeUnit.SECONDS);
+            growFuture.cancel(true);
+            int newDuration = (int) (timeRemaining * reductoPotion.getGrowthReductionFactor());
+            this.duration = newDuration;
+            growFuture = scheduler.schedule(() -> {
+                // Logique de croissance ici
+                hasGrown = true;
+            }, newDuration, TimeUnit.SECONDS);
         }
     }
 
     private void resetTimer() {
-        // Réinitialiser le minuteur avec la nouvelle durée restante
-        timer.cancel();;
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // Logique de croissance ici
-                hasGrown = true;
-            }
-        }, (long) (duration * 1000));
+        if (growFuture != null) {
+            growFuture.cancel(true);
+        }
+        grow();
     }
 
     public void multiplyHarvest(MultiplicarePotion multiplicarePotion) {
         this.harvest *= multiplicarePotion.getHarvestMultiplicationFactor();
-        System.out.println("Nombre de récolte multiplié!");
     }
 
     public int getHarvest() {
@@ -88,6 +88,18 @@ public class Plant {
         return sellingPrice;
     }
 
+    public boolean getHasGrown() {
+        return hasGrown;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
     public int getId() {
         return id;
     }
@@ -97,33 +109,34 @@ public class Plant {
     private void CreatePlant(PlantType type) {
         switch (type) {
             case BITBUD:
-                initializePlant(3, 3, 5, 5.);
+                initializePlant(3, 3, 5, 5., "BITBUD");
                 break;
 
             case DEBUGDREAM:
-                initializePlant(1, 8, 11, 15.);
+                initializePlant(1, 8, 11, 15., "DEBUGDREAM");
                 break;
 
             case HASHHACK:
-                initializePlant(2, 5, 9, 10.);
+                initializePlant(2, 5, 9, 10., "HASHHACK");
                 break;
 
             case BYTEBLOOM:
-                initializePlant(1, 10, 14, 20.);
+                initializePlant(1, 10, 14, 20., "BYTEBLOOM");
                 break;
 
             case KERNELHAZE:
-                initializePlant(1, 15, 21, 30.);
+                initializePlant(1, 15, 21, 30., "KERNELHAZE");
                 break;
         }
     }
 
-    private void initializePlant(int harvest, double purchasePrice, double sellingPrice, double duration) {
+    private void initializePlant(int harvest, double purchasePrice, double sellingPrice, double duration, String type) {
         this.harvest = harvest;
         this.purchasePrice = purchasePrice;
         this.sellingPrice = sellingPrice;
         this. duration = duration;
         this.hasGrown = false;
+        this.type = type;
     }
     // endregion
 }

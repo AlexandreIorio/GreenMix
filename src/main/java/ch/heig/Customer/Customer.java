@@ -2,6 +2,8 @@ package ch.heig.Customer;
 
 import ch.heig.Garden.Plant;
 import ch.heig.Potion.Potion;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Customer {
     // region Public const
@@ -9,18 +11,55 @@ public class Customer {
     // endregion
 
     // region Private Parameters
+    private String username;
     private double wallet;
     private final Plant[] plants;
+    private final List<Tool> tools = new ArrayList<>();
     // endregion
 
     // region Ctor
-    public Customer(double wallet) {
+    public Customer(String username, double wallet) {
+        this.username = username;
         this.wallet = wallet;
         this.plants = new Plant[MAX_PLANTS];
+        this.tools.add(new Tool("FOURCHE"));
+        this.tools.add(new Tool("CISAILLE"));
     }
     // endregion
 
     // region Public Methods
+
+    // Getter method
+    public String getUsername(){
+        return username;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public Plant[] getPlants() {
+        return plants;
+    }
+
+    public List<Tool> getTools(){
+        return tools;
+    }
+
+    // API method
+    public void addMoney(double money){
+        wallet += money;
+    }
+
+    public void updateUsername(String username){
+        this.username = username;
+    }
+
+    public boolean deleteTool(String toolName) {
+        return tools.removeIf(tool -> tool.getName().equals(toolName.toUpperCase()));
+    }
+
+    // Plantation method
     public boolean plantPlant(Plant plant) {
         if (wallet < plant.getPurchasePrice()) {
             return false;
@@ -56,26 +95,18 @@ public class Customer {
         }
     }
 
-    public double getWallet() {
-        return wallet;
-    }
-
-    public Plant[] getPlants() {
-        return plants;
-    }
-
     public Plant getPlantById(int targetId) {
         for (Plant plant : plants) {
-            if (plant.getId() == targetId) {
+            if (plant != null && plant.getId() == targetId) {
                 return plant;
             }
         }
-        throw new ArrayStoreException("Pas de plante avec l'id demandé");
+        return null;
     }
 
     public void addPlantToGarden(Plant plant) {
         for (int i = 0; i < plants.length; ++ i) {
-            if (plants[i] != null) {
+            if (plants[i] == null) {
                 plants[i] = plant;
                 break;
             }
