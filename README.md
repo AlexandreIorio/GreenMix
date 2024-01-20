@@ -358,6 +358,12 @@ First you must pull the image.
 docker pull ghcr.io/theodrosrun/greenmix:v1.0.0
 ```
 
+Then, execute the following command with the desired options:
+
+```sh
+docker run ghcr.io/theodrosrun/greenmix:v1.0.0
+```
+
 <br>
 
 ### Run it with docker compose
