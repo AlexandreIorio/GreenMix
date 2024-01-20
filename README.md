@@ -16,7 +16,98 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 ---
 
-## Explains what the web application is for with its documented application protocol interface (API)
+## What the web application is for and its API
+
+The web application provides an immersive virtual gardening experience, 
+combining educational content with engaging activities like planting and harvesting. 
+It's designed to be both entertaining and relaxing, offering users a unique way to learn 
+about gardening and manage resources through a virtual wallet. The app is accessible to
+users of all ages, making it a fun and interactive way to enjoy gardening virtually and learn 
+strategic resource management.
+
+### **Key Features**
+
+1. **Gardening Activities**
+    - Enables users to grow a variety of plants with unique care requirements and timelines.
+
+2. **Use of Potions**
+    - Offers special potions to enhance plant growth, increase yield, or protect against pests.
+
+3. **Real-Time Plant Growth**
+    - Plants grow in real-time, requiring ongoing care and attention from the user.
+
+4. **Interactive Garden Management**
+    - Lets users design and manage their virtual garden, making decisions on plant placement and resource use.
+
+### Customer
+
+- `GET /profile`
+    - Retrieves the current customer's profile.
+    - **Response**: Customer's information in JSON format.
+    - **Status Codes**:
+        - `200 OK`: Successfully retrieved.
+
+
+- `POST /profile/wallet/{money}`
+    - Adds money to the customer's wallet.
+    - **Response**: Success or error message.
+    - **Status Codes**:
+        - `200 OK`: Money added successfully.
+        - `400 Bad Request`: Invalid money format.
+
+
+- `PUT /profile/update/{username}`
+    - Updates the customer's username.
+    - **Response**: Success or error message.
+    - **Status Codes**:
+        - `200 OK`: Username updated successfully.
+        - `400 Bad Request`: Invalid username format.
+
+
+- `DELETE /profile/tool/{tool}`
+    - Removes a tool from the customer's profile.
+    - **Response**: Success or error message.
+    - **Status Codes**:
+        - `200 OK`: Tool removed successfully.
+        - `406 Not Acceptable`: Tool does not exist.
+
+    
+### Plantation
+
+- `GET /grow/{plantType}`
+    - Initiates the growth of a specific type of plant.
+    - **Response**: Success or error message.
+    - **Status Codes**:
+        - `200 OK`: Plant is growing.
+        - `402 Payment Required`: Insufficient funds.
+        - `400 Bad Request`: Invalid plant type.
+
+
+- `GET /harvest/{plantId}`
+    - Harvests a fully-grown plant.
+    - **Response**: Success message with profit details.
+    - **Status Codes**:
+        - `200 OK`: Harvest successful.
+        - `422 Unprocessable Content`: Plant not fully grown.
+        - `400 Bad Request`: Invalid plant ID.
+        - `406 Not Acceptable`: Plant does not exist.
+
+
+- `GET /potion/{potionType}/{plantId}`
+    - Applies a potion to a plant.
+    - **Response**: Success or error message.
+    - **Status Codes**:
+        - `200 OK`: Potion used successfully.
+        - `402 Payment Required`: Insufficient funds for potion.
+        - `400 Bad Request`: Invalid potion type or plant ID.
+        - `406 Not Acceptable`: Plant does not exist.
+
+
+- `GET /garden`
+    - Retrieves all plants in the customer's garden.
+    - **Response**: List of plants in JSON format.
+    - **Status Codes**:
+        - `200 OK`: Successfully retrieved.
 
 <br>
 
