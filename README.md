@@ -172,12 +172,12 @@ strategic resource management.
 2. Login
 
 Option 1: SSH with password 
-- In your terminal: __ssh heiguser@10.190.132.59__
-- Then enter the password: __FTNXzTNJau3cskpc967l__
+- In your terminal: **ssh heiguser@10.190.132.59**
+- Then enter the password: ...
 
 Option 2: SSH without password if you key is added to the server
-- In your terminal: __ssh -i C:\path\to\public_key heiguser@10.190.132.59__
-- Then enter the password: __press enter__
+- In your terminal: **ssh -i C:\path\to\public_key heiguser@10.190.132.59**
+- Then enter the password: ...
 
 <br>
 
@@ -275,7 +275,6 @@ sudo usermod -aG docker $USER
 docker run hello-world
 ```
 
-
 <br>
 
 ### Install Docker Compose using the repository:
@@ -301,13 +300,33 @@ Docker Compose version vN.N.N
 
 <br>
 
-### Clone the repository on the virtual machine with https
+---
 
-```sh
-git clone https://github.com/AlexandreIorio/GreenMix.git
-```
-This will ensure that you can clone the repository without the need of an SSH
-configuration.
+## How to configure the DNS zone to access the web application
+
+The DNS setup for `greenmix.dedyn.io` is configured through deSEC, a DNS hosting service. To direct traffic to our web applications, subdomains are used. Here's how they are currently configured:
+
+### A Records for Subdomains
+
+- **Subdomain `app`**:
+    - **Type:** A (Address Record)
+    - **Name:** app.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
+
+
+- **Subdomain `whoami`**:
+    - **Type:** A
+    - **Name:** whoami.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
+
+
+- **Subdomain `traefik`**:
+    - **Type:** A
+    - **Name:** traefik.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
 
 <br>
 
@@ -315,11 +334,13 @@ configuration.
 
 ## How to deploy, run and access the web application
 
-<br>
+### Clone the repository on the virtual machine with https
 
----
-
-## How to configure the DNS zone to access the web application
+```sh
+git clone https://github.com/AlexandreIorio/GreenMix.git
+```
+This will ensure that you can clone the repository without the need of an SSH
+configuration.
 
 <br>
 
@@ -399,7 +420,6 @@ docker-compose up
 2. **Interacting with the Application**:
 
 
-
 3. **Shutting Down the Application**:
 ```bash
 docker-compose down
@@ -410,8 +430,6 @@ docker-compose down
 ---
 
 ## How to interact with the web application with examples and outputs using curl
-
-<br>
 
 ### Retrieve Customer Profile
 
