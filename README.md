@@ -389,3 +389,140 @@ docker-compose down
 ---
 
 ## How to interact with the web application with examples and outputs using curl
+
+<br>
+
+### Retrieve Customer Profile
+
+**Curl Command:**
+```bash
+curl -X GET http://localhost:8080/profile
+```
+
+**Expected Output:**
+```json
+{
+  "username": "Jerry",
+  "wallet": 5.0,
+  "plants": []
+}
+```
+
+<br>
+
+### Add Money to Wallet
+
+**Curl Command:**
+```bash
+curl -X POST http://localhost:8080/profile/wallet/{money} -d "{money}"
+```
+
+*Replace `{money}` with the amount you want to add.*
+
+**Expected Output:**
+```
+"Money added successfully."
+```
+
+<br>
+
+### Update Customer Username
+
+**Curl Command:**
+```bash
+curl -X PUT http://localhost:8080/profile/update/{username} -d "{username}"
+```
+
+*Replace `{username}` with the new username.*
+
+**Expected Output:**
+```
+"Username updated successfully."
+```
+
+<br>
+
+### Delete a Tool from the Profile
+
+**Curl Command:**
+```bash
+curl -X DELETE http://localhost:8080/profile/tool/{tool}
+```
+
+*Replace `{tool}` with the name of the tool to remove.*
+
+**Expected Output:**
+```
+"Tool removed successfully."
+```
+
+<br>
+
+### Grow a Plant
+
+**Curl Command:**
+```bash
+curl -X GET http://localhost:8080/grow/{plantType}
+```
+
+*Replace `{plantType}` with the type of plant to grow.*
+
+**Expected Output:**
+```
+"Plant is growing."
+```
+
+<br>
+
+### Harvest a Plant
+
+To harvest a fully-grown plant:
+
+**Curl Command:**
+```bash
+curl -X GET http://localhost:8080/harvest/{plantId}
+```
+
+*Replace `{plantId}` with the ID of the plant to harvest.*
+
+**Expected Output:**
+```
+"Harvest successful. Profit: {profitAmount}"
+```
+
+<br>
+
+### Use a Potion on a Plant
+
+**Curl Command:**
+```bash
+curl -X GET http://localhost:8080/potion/{potionType}/{plantId}
+```
+
+*Replace `{potionType}` with the type of potion and `{plantId}` with the plant ID.*
+
+**Expected Output:**
+```
+"Potion used successfully."
+```
+
+<br>
+
+### View All Plants in the Garden
+
+**Curl Command:**
+```bash
+curl -X GET http://localhost:8080/garden
+```
+
+**Expected Output:**
+```json
+[
+  {
+    "plantId": 1,
+    "type": "Rose",
+    "status": "Growing"
+  },
+  ...
+]
+```
