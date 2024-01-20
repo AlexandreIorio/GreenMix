@@ -24,16 +24,24 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 #### Access the virtual machine
 
-You will have to be connected to the
+1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
-It is mandatory. Then, in your terminal, run the following command:
+
+2. In your terminal, run the following command:
 
 ```sh
 ssh heiguser@10.190.132.59 
 ```
+3. Then enter the password: FTNXzTNJau3cskpc967l
 
-- username: heiguser
-- password: FTNXzTNJau3cskpc967l
+<br>
+
+
+Other information:
+- Hostname: IICT-MV358-DAI 
+- internal IP: 10.190.132.59 
+- external IP: 185.144.38.59
+
 
 <br>
 
