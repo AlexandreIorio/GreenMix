@@ -16,7 +16,41 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 ---
 
+## Explains what the web application is for with its documented application protocol interface (API)
+
+<br>
+
+---
+
 ## Group composition and roles
+
+1. **Alexandre Iorio** - Role: Coordinator
+    - Responsibilities:
+        - Communication with other groups and teachers.
+        - Preparation and presentation of the project.
+        - Managing the GitHub repository and writing the README.
+
+
+2. **Colin Jaques** - Role: Architecture
+    - Responsibilities:
+        - Collaboration with the Back-end Developer for API integration.
+        - Implementation of the CRUD API on the virtual machine.
+        - DNS configuration for access via domain name.
+        - Ensuring the security and availability of the web application.
+
+
+3. **Theodros Mulugeta** - Role: System Administration
+    - Responsibilities:
+        - Configuration and management of the virtual machine.
+        - Installation of Docker and Docker Compose on the VM.
+        - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
+
+
+4. **Walid Slimani** - Role: Back-end Developer
+    - Responsibilities:
+        - Development of server-side logic and database.
+        - Implementation of the CRUD API on the virtual machine.
+        - Collaboration with the Front-end Developer for API integration.
 
 <br>
 
