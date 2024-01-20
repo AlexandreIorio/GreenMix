@@ -175,7 +175,7 @@ Option 1: SSH with password
 - In your terminal: __ssh heiguser@10.190.132.59__
 - Then enter the password: __FTNXzTNJau3cskpc967l__
 
-Option 2: SSH without password
+Option 2: SSH without password if you key is added to the server
 - In your terminal: __ssh -i C:\path\to\public_key heiguser@10.190.132.59__
 - Then enter the password: __press enter__
 
