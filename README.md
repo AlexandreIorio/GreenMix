@@ -128,14 +128,14 @@ strategic resource management.
 
 ## Group composition and roles
 
-1. **Alexandre Iorio** - Role: Coordinator
+1. **Alexandre Iorio** - Role: Coordination and Management
     - Responsibilities:
         - Communication with other groups and teachers.
         - Preparation and presentation of the project.
         - Managing the GitHub repository and writing the README.
 
 
-2. **Colin Jaques** - Role: Architecture
+2. **Colin Jaques** - Role: Software Architecture
     - Responsibilities:
         - Collaboration with the Back-end Developer for API integration.
         - Implementation of the CRUD API on the virtual machine.
@@ -150,11 +150,11 @@ strategic resource management.
         - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
 
 
-4. **Walid Slimani** - Role: Back-end Developer
+4. **Walid Slimani** - Role: Back-end Software Development
     - Responsibilities:
         - Development of server-side logic and database.
         - Implementation of the CRUD API on the virtual machine.
-        - Collaboration with the Front-end Developer for API integration.
+        - Collaboration for API integration.
 
 <br>
 
@@ -172,12 +172,12 @@ strategic resource management.
 2. Login
 
 Option 1: SSH with password 
-- In your terminal: __ssh heiguser@10.190.132.59__
-- Then enter the password: __FTNXzTNJau3cskpc967l__
+- In your terminal: **ssh heiguser@10.190.132.59**
+- Then enter the password: ...
 
 Option 2: SSH without password if you key is added to the server
-- In your terminal: __ssh -i C:\path\to\public_key heiguser@10.190.132.59__
-- Then enter the password: __press enter__
+- In your terminal: **ssh -i C:\path\to\public_key heiguser@10.190.132.59**
+- Then enter the password: ...
 
 <br>
 
@@ -275,7 +275,6 @@ sudo usermod -aG docker $USER
 docker run hello-world
 ```
 
-
 <br>
 
 ### Install Docker Compose using the repository:
@@ -301,6 +300,40 @@ Docker Compose version vN.N.N
 
 <br>
 
+---
+
+## How to configure the DNS zone to access the web application
+
+The DNS setup for `greenmix.dedyn.io` is configured through deSEC, a DNS hosting service. To direct traffic to our web applications, subdomains are used. Here's how they are currently configured:
+
+### A Records for Subdomains
+
+- **Subdomain `app`**:
+    - **Type:** A (Address Record)
+    - **Name:** app.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
+
+
+- **Subdomain `whoami`**:
+    - **Type:** A
+    - **Name:** whoami.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
+
+
+- **Subdomain `traefik`**:
+    - **Type:** A
+    - **Name:** traefik.greenmix.dedyn.io
+    - **Value (IP Address):** 185.144.38.59
+    - **TTL:** 3600 seconds
+
+<br>
+
+---
+
+## How to deploy, run and access the web application
+
 ### Clone the repository on the virtual machine with https
 
 ```sh
@@ -311,15 +344,22 @@ configuration.
 
 <br>
 
----
+### Run it with docker compose
 
-## How to deploy, run and access the web application
+1. **Running with Docker Compose**:
 
-<br>
+In the directory containing your `docker-compose.yml`, start the services. This will pull the images from github and start the server and clients.
+```bash
+docker-compose up
+```
 
----
+2. **Interacting with the Application**:
 
-## How to configure the DNS zone to access the web application
+
+3. **Shutting Down the Application**:
+```bash
+docker-compose down
+```
 
 <br>
 
@@ -371,47 +411,9 @@ docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 
 <br>
 
-### Run it directly via Docker
-
-First you must pull the image.
-
-```sh
-docker pull ghcr.io/theodrosrun/greenmix:v1.0.0
-```
-
-Then, execute the following command with the desired options:
-
-```sh
-docker run ghcr.io/theodrosrun/greenmix:v1.0.0
-```
-
-<br>
-
-### Run it with docker compose
-
-1. **Running with Docker Compose**:
-
-In the directory containing your `docker-compose.yml`, start the services. This will pull the images from github and start the server and clients.
-```bash
-docker-compose up
-```
-
-2. **Interacting with the Application**:
-
-
-
-3. **Shutting Down the Application**:
-```bash
-docker-compose down
-```
-      
-<br>
-
 ---
 
 ## How to interact with the web application with examples and outputs using curl
-
-<br>
 
 ### Retrieve Customer Profile
 
@@ -543,7 +545,6 @@ curl -X GET http://localhost:8080/garden
     "plantId": 1,
     "type": "Rose",
     "status": "Growing"
-  },
-  ...
+  }
 ]
 ```
