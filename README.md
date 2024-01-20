@@ -58,7 +58,7 @@ Ajouter descritpion + fonctiannalité de l'appli quand c'est terminé
 
 ## How to install and configure the server
 
-<br>
+
 
 ### Access the virtual machine
 
@@ -262,8 +262,6 @@ docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 <br>
 
 ### Run it directly via Docker
-
-To run the application without docker compose follow the guide :
 
 First you must pull the image.
 
