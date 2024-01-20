@@ -102,11 +102,3 @@ services:
       ## HTTP
       - traefik.http.routers.greenmix-http.entrypoints=http
       - traefik.http.routers.greenmix-http.rule=Host(`${GREENMIX_FULLY_QUALIFIED_DOMAIN_NAME}`)
-      # We add a middleware to redirect HTTP to HTTPS
-      - traefik.http.routers.greenmix-http.middlewares=redirect-to-https
-      ## HTTPS
-      # We add the HTTPS configuration
-      - traefik.http.routers.greenmix-https.entrypoints=https
-      - traefik.http.routers.greenmix-https.rule=Host(`${GREENMIX_FULLY_QUALIFIED_DOMAIN_NAME}`)
-      - traefik.http.routers.greenmix-https.tls=true
-      - traefik.http.routers.greenmix-https.tls.certresolver=letsencrypt
