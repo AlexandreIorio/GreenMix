@@ -90,7 +90,7 @@ services:
 
   # Greenmix
   greenmix:
-    image: your_greenmix_image:${GREENMIX_IMAGE_VERSION} # Remplacez par l'image Docker de votre application
+    image: ...
     networks:
       - traefik
     expose:
