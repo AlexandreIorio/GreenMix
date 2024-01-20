@@ -128,14 +128,14 @@ strategic resource management.
 
 ## Group composition and roles
 
-1. **Alexandre Iorio** - Role: Coordinator
+1. **Alexandre Iorio** - Role: Coordination and Management
     - Responsibilities:
         - Communication with other groups and teachers.
         - Preparation and presentation of the project.
         - Managing the GitHub repository and writing the README.
 
 
-2. **Colin Jaques** - Role: Architecture
+2. **Colin Jaques** - Role: Software Architecture
     - Responsibilities:
         - Collaboration with the Back-end Developer for API integration.
         - Implementation of the CRUD API on the virtual machine.
@@ -150,7 +150,7 @@ strategic resource management.
         - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
 
 
-4. **Walid Slimani** - Role: Back-end Developer
+4. **Walid Slimani** - Role: Back-end Software Development
     - Responsibilities:
         - Development of server-side logic and database.
         - Implementation of the CRUD API on the virtual machine.
