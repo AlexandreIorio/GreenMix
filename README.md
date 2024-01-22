@@ -10,14 +10,14 @@
 
 # Table of Contents
 
-- [1. What the Web Application is For](#what-the-web-application-is-for)
-- [2. API](#API)
-- [3. Group composition and roles](#Group-composition-and-roles)
-- [4. How to install and configure the server](#How-to-install-and-configure-the-server)
-- [5. How to deploy, run and access the web application](#How-to-deploy-run-and-access-the-web-application)
-- [6. How to configure the DNS zone to access the web application](#How-to-configure-the-DNS-zone-to-access-the-web-application)
-- [7. How to build and publish the web application with Docker](#How-to-build-and-publish-the-web-application-with-Docker)
-- [8. How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
+- [What the Web Application is For](#what-the-web-application-is-for)
+- [API](#API)
+- [How to install and configure the server](#How-to-install-and-configure-the-server)
+- [How to build and publish the web application with Docker](#How-to-build-and-publish-the-web-application-with-Docker)
+- [How to configure the DNS zone to access the web application](#How-to-configure-the-DNS-zone-to-access-the-web-application)
+- [How to deploy, run and access the web application](#How-to-deploy-run-and-access-the-web-application)
+- [How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
+- [Group composition and roles](#Group-composition-and-roles)
 
 <br>
 
@@ -126,45 +126,15 @@ strategic resource management.
 
 ---
 
-## Group composition and roles
-
-1. **Alexandre Iorio** - Role: Coordination and Management
-    - Responsibilities:
-        - Communication with other groups and teachers.
-        - Preparation and presentation of the project.
-        - Managing the GitHub repository and writing the README.
-
-
-2. **Colin Jaques** - Role: Software Architecture
-    - Responsibilities:
-        - Collaboration with the Back-end Developer for API integration.
-        - Implementation of the CRUD API on the virtual machine.
-        - DNS configuration for access via domain name.
-        - Ensuring the security and availability of the web application.
-
-
-3. **Theodros Mulugeta** - Role: System Administration
-    - Responsibilities:
-        - Configuration and management of the virtual machine.
-        - Installation of Docker and Docker Compose on the VM.
-        - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
-
-
-4. **Walid Slimani** - Role: Back-end Software Development
-    - Responsibilities:
-        - Development of server-side logic and database.
-        - Implementation of the CRUD API on the virtual machine.
-        - Collaboration for API integration.
-
-<br>
-
----
-
 ## How to install and configure the server
 
-
-
 ### Access the virtual machine
+
+- Hostname: IICT-MV358-DAI
+- internal IP: 10.190.132.59
+- external IP: 185.144.38.59
+
+<br>
 
 1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
@@ -178,14 +148,6 @@ Option 1: SSH with password
 Option 2: SSH without password if you key is added to the server
 - In your terminal: **ssh -i C:\path\to\public_key heiguser@10.190.132.59**
 - Then enter the password: ...
-
-<br>
-
-Other information:
-- Hostname: IICT-MV358-DAI 
-- internal IP: 10.190.132.59 
-- external IP: 185.144.38.59
-
 
 <br>
 
@@ -302,6 +264,54 @@ Docker Compose version vN.N.N
 
 ---
 
+## How to build and publish the web application with Docker
+
+### Clone and build the repository.
+
+1. Clone the repository:
+```sh
+git clone https://github.com/AlexandreIorio/GreenMix.git
+```
+
+2. Change to the project directory:
+```sh
+cd GreenMix
+```
+
+3. Build the web application:
+```sh
+# Download the dependencies
+./mvnw dependency:resolve clean compile
+
+# Package the application
+./mvnw package
+```
+
+<br>
+
+### Once the Jar are generated, you can build the docker images.
+
+1. Navigate to the project's directory.
+2. Build the image using the Docker build command.
+  ```bash
+  docker build -t ghcr.io/theodrosrun/greenmix:v1.0 .
+  ```
+be sure to adapt the version number as needed.
+
+<br>
+
+### Publishing to GitHub
+
+After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
+
+```sh
+docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0
+```
+
+<br>
+
+---
+
 ## How to configure the DNS zone to access the web application
 
 The DNS setup for `greenmix.dedyn.io` is configured through deSEC, a DNS hosting service. To direct traffic to our web applications, subdomains are used. Here's how they are currently configured:
@@ -355,58 +365,12 @@ docker-compose up
 
 2. **Interacting with the Application**:
 
+For interaction see the chapter: [How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
 
-3. **Shutting Down the Application**:
+
+3. **Shutting down the Application**:
 ```bash
 docker-compose down
-```
-
-<br>
-
----
-
-## How to build and publish the web application with Docker
-
-### Clone and build the repository.
-
-1. Clone the repository:
-```sh
-git clone https://github.com/AlexandreIorio/GreenMix.git
-```
-
-2. Change to the project directory:
-```sh
-cd GreenMix
-```
-
-3. Build the web application:
-```sh
-# Download the dependencies
-./mvnw dependency:resolve clean compile
-
-# Package the application
-./mvnw package
-```
-
-<br>
-
-### Once the Jar are generated, you can build the docker images.
-
-1. Navigate to the server's directory. 
-2. Build the image using the Docker build command.
-  ```bash
-  docker build -t ghcr.io/theodrosrun/greenmix:v1.0.0 .
-  ```
-be sure to adapt the version number as needed.
-
-<br>
-
-### Publishing to GitHub
-
-After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
-
-```sh
-docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 ```
 
 <br>
@@ -419,15 +383,38 @@ docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/profile
+curl -X GET http://app.greenmix.dedyn.io/profile
 ```
 
 **Expected Output:**
 ```json
 {
   "username": "Jerry",
-  "wallet": 5.0,
-  "plants": []
+  "wallet": 2,
+  "plants": [
+    {
+      "harvest": 3,
+      "duration": 5,
+      "purchasePrice": 3,
+      "hasGrown": true,
+      "id": 0,
+      "type": "BITBUD",
+      "sellingPricePrice": 5
+    },
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "tools": [
+    {
+      "name": "FOURCHE"
+    },
+    {
+      "name": "CISAILLE"
+    }
+  ]
 }
 ```
 
@@ -437,7 +424,7 @@ curl -X GET http://localhost:8080/profile
 
 **Curl Command:**
 ```bash
-curl -X POST http://localhost:8080/profile/wallet/{money} -d "{money}"
+curl -X POST http://app.greenmix.dedyn.io/profile/wallet/{money}
 ```
 
 *Replace `{money}` with the amount you want to add.*
@@ -453,7 +440,7 @@ curl -X POST http://localhost:8080/profile/wallet/{money} -d "{money}"
 
 **Curl Command:**
 ```bash
-curl -X PUT http://localhost:8080/profile/update/{username} -d "{username}"
+curl -X PUT http://app.greenmix.dedyn.io/profile/update/{username}
 ```
 
 *Replace `{username}` with the new username.*
@@ -469,7 +456,7 @@ curl -X PUT http://localhost:8080/profile/update/{username} -d "{username}"
 
 **Curl Command:**
 ```bash
-curl -X DELETE http://localhost:8080/profile/tool/{tool}
+curl -X DELETE http://app.greenmix.dedyn.io/profile/tool/{tool}
 ```
 
 *Replace `{tool}` with the name of the tool to remove.*
@@ -485,7 +472,7 @@ curl -X DELETE http://localhost:8080/profile/tool/{tool}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/grow/{plantType}
+curl -X GET http://app.greenmix.dedyn.io/grow/{plantType}
 ```
 
 *Replace `{plantType}` with the type of plant to grow.*
@@ -503,7 +490,7 @@ To harvest a fully-grown plant:
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/harvest/{plantId}
+curl -X GET http://app.greenmix.dedyn.io/harvest/{plantId}
 ```
 
 *Replace `{plantId}` with the ID of the plant to harvest.*
@@ -519,7 +506,7 @@ curl -X GET http://localhost:8080/harvest/{plantId}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/potion/{potionType}/{plantId}
+curl -X GET http://app.greenmix.dedyn.io/potion/{potionType}/{plantId}
 ```
 
 *Replace `{potionType}` with the type of potion and `{plantId}` with the plant ID.*
@@ -535,16 +522,61 @@ curl -X GET http://localhost:8080/potion/{potionType}/{plantId}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/garden
+curl -X GET http://app.greenmix.dedyn.io/garden
 ```
 
 **Expected Output:**
 ```json
 [
   {
-    "plantId": 1,
-    "type": "Rose",
-    "status": "Growing"
-  }
+    "harvest": 3,
+    "duration": 5,
+    "purchasePrice": 3,
+    "hasGrown": true,
+    "id": 0,
+    "type": "BITBUD",
+    "sellingPricePrice": 5
+  },
+  null,
+  null,
+  null,
+  null,
+  null
 ]
 ```
+
+<br>
+
+---
+
+## Group composition and roles
+
+1. **Alexandre Iorio** - Role: Coordination and Management
+    - Responsibilities:
+        - Communication with other groups and teachers.
+        - Preparation and presentation of the project.
+        - Managing the GitHub repository and writing the README.
+
+
+2. **Colin Jaques** - Role: Software Architecture
+    - Responsibilities:
+        - Collaboration with the Back-end Developer for API integration.
+        - Implementation of the CRUD API on the virtual machine.
+        - DNS configuration for access via domain name.
+        - Ensuring the security and availability of the web application.
+
+
+3. **Theodros Mulugeta** - Role: System Administration
+    - Responsibilities:
+        - Configuration and management of the virtual machine.
+        - Installation of Docker and Docker Compose on the VM.
+        - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
+
+
+4. **Walid Slimani** - Role: Back-end Software Development
+    - Responsibilities:
+        - Development of server-side logic and database.
+        - Implementation of the CRUD API on the virtual machine.
+        - Collaboration for API integration.
+
+<br>
