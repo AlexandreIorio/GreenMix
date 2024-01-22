@@ -20,6 +20,8 @@ public class Plant {
     private static int nb;
     private final int id = nb++;
 
+    private PlantType plantType;
+
     //private Timer timer;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> growFuture;
@@ -29,6 +31,7 @@ public class Plant {
 
     // region Ctor
     public Plant(PlantType type) {
+        plantType = type;
         CreatePlant(type);
     }
     // endregion
@@ -98,6 +101,10 @@ public class Plant {
 
     public String getType() {
         return this.type;
+    }
+
+    public PlantType getPlantType() {
+        return plantType;
     }
 
     public int getId() {

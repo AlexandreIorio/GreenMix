@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Customer {
     // region Public const
-    public static final int MAX_PLANTS = 6;
+    public static final int MAX_PLANTS = 9;
     // endregion
 
     // region Private Parameters
