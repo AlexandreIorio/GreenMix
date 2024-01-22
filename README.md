@@ -166,6 +166,12 @@ strategic resource management.
 
 ### Access the virtual machine
 
+- Hostname: IICT-MV358-DAI
+- internal IP: 10.190.132.59
+- external IP: 185.144.38.59
+
+<br>
+
 1. Start your 
 [VPN](https://intranet.heig-vd.ch/services/informatique/poste-de-travail/reseau/vpn/Pages/vpn.aspx).
 
@@ -178,14 +184,6 @@ Option 1: SSH with password
 Option 2: SSH without password if you key is added to the server
 - In your terminal: **ssh -i C:\path\to\public_key heiguser@10.190.132.59**
 - Then enter the password: ...
-
-<br>
-
-Other information:
-- Hostname: IICT-MV358-DAI 
-- internal IP: 10.190.132.59 
-- external IP: 185.144.38.59
-
 
 <br>
 
@@ -392,7 +390,7 @@ cd GreenMix
 
 ### Once the Jar are generated, you can build the docker images.
 
-1. Navigate to the server's directory. 
+1. Navigate to the project's directory. 
 2. Build the image using the Docker build command.
   ```bash
   docker build -t ghcr.io/theodrosrun/greenmix:v1.0.0 .
