@@ -417,15 +417,38 @@ docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/profile
+curl -X GET http://app.greenmix.dedyn.io/profile
 ```
 
 **Expected Output:**
 ```json
 {
   "username": "Jerry",
-  "wallet": 5.0,
-  "plants": []
+  "wallet": 2,
+  "plants": [
+    {
+      "harvest": 3,
+      "duration": 5,
+      "purchasePrice": 3,
+      "hasGrown": true,
+      "id": 0,
+      "type": "BITBUD",
+      "sellingPricePrice": 5
+    },
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "tools": [
+    {
+      "name": "FOURCHE"
+    },
+    {
+      "name": "CISAILLE"
+    }
+  ]
 }
 ```
 
@@ -435,7 +458,7 @@ curl -X GET http://localhost:8080/profile
 
 **Curl Command:**
 ```bash
-curl -X POST http://localhost:8080/profile/wallet/{money} -d "{money}"
+curl -X POST http://app.greenmix.dedyn.io/profile/wallet/{money}
 ```
 
 *Replace `{money}` with the amount you want to add.*
@@ -451,7 +474,7 @@ curl -X POST http://localhost:8080/profile/wallet/{money} -d "{money}"
 
 **Curl Command:**
 ```bash
-curl -X PUT http://localhost:8080/profile/update/{username} -d "{username}"
+curl -X PUT http://app.greenmix.dedyn.io/profile/update/{username}
 ```
 
 *Replace `{username}` with the new username.*
@@ -467,7 +490,7 @@ curl -X PUT http://localhost:8080/profile/update/{username} -d "{username}"
 
 **Curl Command:**
 ```bash
-curl -X DELETE http://localhost:8080/profile/tool/{tool}
+curl -X DELETE http://app.greenmix.dedyn.io/profile/tool/{tool}
 ```
 
 *Replace `{tool}` with the name of the tool to remove.*
@@ -483,7 +506,7 @@ curl -X DELETE http://localhost:8080/profile/tool/{tool}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/grow/{plantType}
+curl -X GET http://app.greenmix.dedyn.io/grow/{plantType}
 ```
 
 *Replace `{plantType}` with the type of plant to grow.*
@@ -501,7 +524,7 @@ To harvest a fully-grown plant:
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/harvest/{plantId}
+curl -X GET http://app.greenmix.dedyn.io/harvest/{plantId}
 ```
 
 *Replace `{plantId}` with the ID of the plant to harvest.*
@@ -517,7 +540,7 @@ curl -X GET http://localhost:8080/harvest/{plantId}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/potion/{potionType}/{plantId}
+curl -X GET http://app.greenmix.dedyn.io/potion/{potionType}/{plantId}
 ```
 
 *Replace `{potionType}` with the type of potion and `{plantId}` with the plant ID.*
@@ -533,16 +556,25 @@ curl -X GET http://localhost:8080/potion/{potionType}/{plantId}
 
 **Curl Command:**
 ```bash
-curl -X GET http://localhost:8080/garden
+curl -X GET http://app.greenmix.dedyn.io/garden
 ```
 
 **Expected Output:**
 ```json
 [
   {
-    "plantId": 1,
-    "type": "Rose",
-    "status": "Growing"
-  }
+    "harvest": 3,
+    "duration": 5,
+    "purchasePrice": 3,
+    "hasGrown": true,
+    "id": 0,
+    "type": "BITBUD",
+    "sellingPricePrice": 5
+  },
+  null,
+  null,
+  null,
+  null,
+  null
 ]
 ```
