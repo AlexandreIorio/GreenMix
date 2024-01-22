@@ -133,12 +133,13 @@ public class PlantationController {
     // region Main with HTTP Request
     public static void main(String[] args) {
         int port = PORT;
+
         if (args.length == 1) {
             port = Integer.parseInt(args[0]);
         }
-        Javalin app = Javalin.create(config -> {
-            config.staticFiles.add("src/main/java/ch/heig/resources", Location.EXTERNAL); // Assurez-vous que le dossier 'resources' est correctement localisé
-        }).start(port);
+
+        Javalin app = Javalin.create().start(port);
+
         Customer customer = new Customer("Jerry", 5.0);
 
         // Menu
