@@ -46,7 +46,13 @@ public class PlantationController {
         sb.append("<h1>Liste des plantes</h1>\n");
 
         for (PlantType p : PlantType.values()) {
-            sb.append("<li><a href=\"/grow/").append(p).append("\">").append(p).append("</a></li>\n");
+            sb.append("<li><a href=\"/grow/").append(p).append("\">")
+                    .append(p).append("&nbsp;").append("cost: ").append(p.getPurchasePrice()).append(" $")
+                    .append(" &nbsp; ").append("duration: ").append(p.getDuration()).append(" s")
+                    .append(" &nbsp; ").append("harvest: ").append(p.getHavrest()).append(" buds")
+                    .append(" &nbsp; ").append("Profit: ").append(p.getSellingPrice() * p.getHavrest()).append(" $")
+                    .append("</a></li>\n");
+
         }
         return sb.toString();
     }
@@ -80,7 +86,6 @@ public class PlantationController {
                 sb.append("</div>");
                 sb.append("</a>");
             }
-
             sb.append("</td>");
             if (i == 2) {
                 sb.append("</tr>");
