@@ -353,8 +353,10 @@ docker-compose up
 
 2. **Interacting with the Application**:
 
+For interaction see the chapter: [8. How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
 
-3. **Shutting Down the Application**:
+
+3. **Shutting down the Application**:
 ```bash
 docker-compose down
 ```
