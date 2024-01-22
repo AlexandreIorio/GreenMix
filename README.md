@@ -305,7 +305,7 @@ be sure to adapt the version number as needed.
 After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
 
 ```sh
-docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0
+docker push ghcr.io/theodrosrun/greenmix:v1.0
 ```
 
 <br>
@@ -548,6 +548,8 @@ curl -X GET http://app.greenmix.dedyn.io/garden
 <br>
 
 ---
+
+If you want a sweet susucre go to http://app.greenmix.dedyn.io/menu
 
 ## Group composition and roles
 
