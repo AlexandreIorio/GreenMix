@@ -20,6 +20,9 @@ public class Plant {
     private static int nb;
     private final int id = nb++;
 
+    private PlantType plantType;
+
+
     //private Timer timer;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> growFuture;
@@ -29,6 +32,7 @@ public class Plant {
 
     // region Ctor
     public Plant(PlantType type) {
+        plantType = type;
         CreatePlant(type);
     }
     // endregion
@@ -103,25 +107,29 @@ public class Plant {
     public int getId() {
         return id;
     }
+    public PlantType getPlantType() {
+        return plantType;
+    }
+
     // endregion
 
     // region Private Methods
     private void CreatePlant(PlantType type) {
         switch (type) {
             case BITBUD:
-                initializePlant(3, 3, 5, 5., "BITBUD");
+                initializePlant(type.getHavrest(), type.getPurchasePrice(), type.getSellingPrice(), type.getDuration(),"BITBUD");
                 break;
 
             case DEBUGDREAM:
-                initializePlant(1, 8, 11, 15., "DEBUGDREAM");
+                initializePlant(type.getHavrest(), type.getPurchasePrice(), type.getSellingPrice(), type.getDuration(),"DEBUGDREAM");
                 break;
 
             case HASHHACK:
-                initializePlant(2, 5, 9, 10., "HASHHACK");
+                initializePlant(type.getHavrest(), type.getPurchasePrice(), type.getSellingPrice(), type.getDuration(),"HASHHACK");
                 break;
 
             case BYTEBLOOM:
-                initializePlant(1, 10, 14, 20., "BYTEBLOOM");
+                initializePlant(type.getHavrest(), type.getPurchasePrice(), type.getSellingPrice(), type.getDuration(), "BYTEBLOOM");
                 break;
 
             case KERNELHAZE:
