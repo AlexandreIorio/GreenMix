@@ -549,6 +549,8 @@ curl -X GET http://app.greenmix.dedyn.io/garden
 
 ---
 
+If you want a sweet susucre go to http://app.greenmix.dedyn.io/menu
+
 ## Group composition and roles
 
 1. **Alexandre Iorio** - Role: Coordination and Management

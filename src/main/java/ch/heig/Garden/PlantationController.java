@@ -9,7 +9,7 @@ import io.javalin.http.staticfiles.Location;
 
 public class PlantationController {
     // region public Const
-    public static final int PORT = 8080;
+    public static final int PORT = 80;
     // endregion
 
     // region Private Methods
@@ -46,7 +46,7 @@ public class PlantationController {
         sb.append("<h1>Liste des plantes</h1>\n");
 
         for (PlantType p : PlantType.values()) {
-            sb.append("<li><a href=\"/grow/").append(p).append("\">")
+            sb.append("<li><a href=\"/growview/").append(p).append("\">")
                     .append(p).append("&nbsp;").append("cost: ").append(p.getPurchasePrice()).append(" $")
                     .append(" &nbsp; ").append("duration: ").append(p.getDuration()).append(" s")
                     .append(" &nbsp; ").append("harvest: ").append(p.getHavrest()).append(" buds")
@@ -70,9 +70,9 @@ public class PlantationController {
 
             if (p != null) {
                 String cssClass = p.getHasGrown() ? "plant-growed" : "plant";
-                String canClick = p.getHasGrown() ? "href=\"/harvest/" : "";
+
                 if (p.getHasGrown()) {
-                    sb.append("<a href=\"/harvest/").append(p.getId()).append("\">");
+                    sb.append("<a href=\"/harvestview/").append(p.getId()).append("\">");
                 }else {
                     sb.append("<a>");
                 }
@@ -120,7 +120,6 @@ public class PlantationController {
         sb.append("<a href=\"/mygarden\">voir mon jardin</a>\n");
         return sb.toString();
     }
-
     public static String getHeaderHtml() {
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -133,9 +132,13 @@ public class PlantationController {
 
     // region Main with HTTP Request
     public static void main(String[] args) {
+        int port = PORT;
+        if (args.length == 1) {
+            port = Integer.parseInt(args[0]);
+        }
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("src/main/java/ch/heig/resources", Location.EXTERNAL); // Assurez-vous que le dossier 'resources' est correctement localisé
-        }).start(PORT);
+        }).start(port);
         Customer customer = new Customer("Jerry", 5.0);
 
         // Menu
@@ -143,7 +146,6 @@ public class PlantationController {
             ctx.status(HttpStatus.OK);
             ctx.html(getMenuHtml(customer));
         });
-
         // Customer
         app.get("/profile", ctx ->  {
             ctx.status(HttpStatus.OK);
@@ -200,6 +202,25 @@ public class PlantationController {
 
                 if (growPlant(customer, type)) {
                     ctx.status(HttpStatus.OK);
+                    ctx.result("La plante " + type + " est en train de pousser!");
+                } else {
+                    ctx.status(HttpStatus.PAYMENT_REQUIRED);
+                    ctx.result("Pas assez d'argent pour acheter une graine de plante " + type);
+                }
+            } catch (IllegalArgumentException illegalArgumentException) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("La plante " + plantType.toUpperCase() + " n'existe pas !");
+            }
+        });
+
+        app.get("/growview/{plantType}", ctx -> {
+            String plantType = "";
+            try {
+                plantType = ctx.pathParam("plantType").toUpperCase();
+                PlantType type = PlantType.valueOf(plantType);
+
+                if (growPlant(customer, type)) {
+                    ctx.status(HttpStatus.OK);
                     ctx.html(getIsGrowingHtml(type));
                 } else {
                     ctx.status(HttpStatus.PAYMENT_REQUIRED);
@@ -212,6 +233,29 @@ public class PlantationController {
         });
 
         app.get("/harvest/{plantId}", ctx -> {
+            try {
+                double oldWalletValue = customer.getWallet();
+                int id = Integer.parseInt(ctx.pathParam("plantId"));
+
+                if (harvestPlant(customer, id)) {
+                    double newWalletValue = customer.getWallet();
+                    double profit = newWalletValue - oldWalletValue;
+                    ctx.status(HttpStatus.OK);
+                    ctx.result("Récolte effectuée! Argent gagné: " + profit + ", Nouveau solde du portefeuille: " + customer.getWallet());
+                } else {
+                    ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
+                    ctx.result("La plante n'a pas terminé de pousser!");
+                }
+            } catch (NumberFormatException numberFormatException) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Le format du paramètre plantId n'est pas valable !");
+            } catch (NullPointerException nullPointerException) {
+                ctx.status(HttpStatus.NOT_ACCEPTABLE);
+                ctx.result("La plante recherchée n'existe pas !");
+            }
+        });
+
+        app.get("/harvestview/{plantId}", ctx -> {
             try {
                 double oldWalletValue = customer.getWallet();
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
