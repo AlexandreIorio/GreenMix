@@ -5,7 +5,7 @@ networks:
 # We add a Docker secret to store the users for Basic Auth
 secrets:
   auth_users:
-    file: ./secrets/auth-users.txt
+    file: traefik/secrets/auth-users.txt
 
 services:
   # Traefik
@@ -29,7 +29,7 @@ services:
       # - --certificatesResolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
       - --certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.storage=/treafik/letsencrypt/acme.json
     restart: unless-stopped
     networks:
       - traefik

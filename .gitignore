@@ -1,4 +1,7 @@
-﻿## Intellij IDEA
+﻿# 1. Docker volumes
+treafik/*
+
+# 2. Intellij IDEA
 
 # General
 .idea/libraries/
