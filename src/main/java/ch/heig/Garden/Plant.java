@@ -20,6 +20,9 @@ public class Plant {
     private static int nb;
     private final int id = nb++;
 
+    private PlantType plantType;
+
+
     //private Timer timer;
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> growFuture;
@@ -29,6 +32,7 @@ public class Plant {
 
     // region Ctor
     public Plant(PlantType type) {
+        plantType = type;
         CreatePlant(type);
     }
     // endregion
@@ -103,6 +107,10 @@ public class Plant {
     public int getId() {
         return id;
     }
+    public PlantType getPlantType() {
+        return plantType;
+    }
+
     // endregion
 
     // region Private Methods

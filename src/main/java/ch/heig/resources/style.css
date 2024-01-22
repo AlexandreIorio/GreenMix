@@ -1,0 +1,23 @@
+body {
+    font-family: Arial;
+}
+.plant, plant-growed{
+    margin-right: 20px;
+    box-shadow: 4px 4px 10px 0 rgba(0,0,0,0.5);
+    transition: 0.3s;
+}
+.plant-growed {
+    box-shadow: 0px 0px 5px 3px #7fff00;
+}
+
+
+.plant:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+img {
+    height: 10em;
+}
+h1 {
+    color: #639979;
+}

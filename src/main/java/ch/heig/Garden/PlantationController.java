@@ -5,10 +5,11 @@ import ch.heig.Potion.Potion;
 import ch.heig.Potion.PotionType;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
+import io.javalin.http.staticfiles.Location;
 
 public class PlantationController {
     // region public Const
-    public static final int PORT = 80;
+    public static final int PORT = 8080;
     // endregion
 
     // region Private Methods
@@ -35,15 +36,116 @@ public class PlantationController {
     }
     // endregion
 
+    // region static methods
+    public static String getMenuHtml(Customer customer){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>" +
+                "<h1>Mon wallet</h1>\n");
+        sb.append("<p>Solde du compte: ").append(customer.getWallet()).append(" $</p>\n");
+        sb.append("<a href=\"/mygarden\">Mon jardin</a>\n");
+        sb.append("<h1>Liste des plantes</h1>\n");
+
+        for (PlantType p : PlantType.values()) {
+            sb.append("<li><a href=\"/grow/").append(p).append("\">").append(p).append("</a></li>\n");
+        }
+        return sb.toString();
+    }
+    public static String getGardenHtml(Customer customer) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>" +
+                "<h1>Mon jardin</h1>" +
+                "<table>");
+        int i = 0;
+        for (Plant p : customer.getPlants()) {
+            if (i == 0) {
+                sb.append("<tr>");
+            }
+            sb.append("<td>");
+            if (p != null) {
+                sb.append("<h2>").append(p.getType()).append("</h2>");
+                String harvest = p.getHasGrown() ? "Oui" : "Non";
+                sb.append("<p>").append("Recoltable: ").append(harvest).append("</p>");
+                String image = p.getPlantType().getImageFileName();
+                sb.append("<img src=\"").append(image).append("\"/><br>");
+                if (p.getHasGrown()) {
+                    sb.append("<a href=\"/harvest/").append(p.getId()).append("\">Recolter</a>");
+                }
+            }
+            sb.append("</td>");
+            if (i == 2) {
+                sb.append("</tr>");
+                i = 0;
+            } else {
+                ++i;
+            }
+
+        }
+        sb.append("</table>");
+
+        sb.append("<a href=\"/menu\">Menu</a>\n");
+        return sb.toString();
+    }
+    public static String getIsGrowingHtml(PlantType type) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>" +
+                "<h1>Youpiiii</h1>\n");
+        sb.append("<p>"+type+" est en train de pousser !"+"</p>\n");
+        sb.append("<p>tu pourras la recolter dans "+type.getDuration()+" secondes"+"</p>\n");
+        sb.append("<a href=\"/menu\">retourner au menu</a><br>");
+        sb.append("<a href=\"/mygarden\">voir mon jardin</a>\n");
+        return sb.toString();
+    }
+    public static String getHarvestedHtml(double profit) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>" +
+                "<h1>Bravo</h1>\n");
+        sb.append("<p>Belle recolte !"+"</p>\n");
+        sb.append("<p>tu as gagné "+profit+" $</p>\n");
+        sb.append("<a href=\"/menu\">retourner au menu</a><br>\n");
+        sb.append("<a href=\"/mygarden\">voir mon jardin</a>\n");
+        return sb.toString();
+    }
+
+    // endregion
+
     // region Main with HTTP Request
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(PORT);
+        Javalin app = Javalin.create(config -> {
+            config.staticFiles.add("src/main/java/ch/heig/resources", Location.EXTERNAL); // Assurez-vous que le dossier 'resources' est correctement localisé
+        }).start(PORT);
         Customer customer = new Customer("Jerry", 5.0);
+
+        // Menu
+        app.get("/menu", ctx -> {
+            ctx.status(HttpStatus.OK);
+            ctx.html(getMenuHtml(customer));
+        });
 
         // Customer
         app.get("/profile", ctx ->  {
             ctx.status(HttpStatus.OK);
             ctx.json(customer);
+        });
+
+        app.get("/mygarden", ctx -> {
+            ctx.status(HttpStatus.OK);
+            ctx.html(getGardenHtml(customer));
         });
 
         app.post("/profile/wallet/{money}", ctx -> {
@@ -91,13 +193,12 @@ public class PlantationController {
 
                 if (growPlant(customer, type)) {
                     ctx.status(HttpStatus.OK);
-                    ctx.result("La plante " + type + " est en train de pousser!");
+                    ctx.html(getIsGrowingHtml(type));
                 } else {
                     ctx.status(HttpStatus.PAYMENT_REQUIRED);
                     ctx.result("Pas assez d'argent pour acheter une graine de plante " + type);
                 }
-            }
-            catch (IllegalArgumentException illegalArgumentException) {
+            } catch (IllegalArgumentException illegalArgumentException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("La plante " + plantType.toUpperCase() + " n'existe pas !");
             }
@@ -112,17 +213,15 @@ public class PlantationController {
                     double newWalletValue = customer.getWallet();
                     double profit = newWalletValue - oldWalletValue;
                     ctx.status(HttpStatus.OK);
-                    ctx.result("Récolte effectuée! Argent gagné: " + profit + ", Nouveau solde du portefeuille: " + customer.getWallet());
+                    ctx.html(getHarvestedHtml(profit));
                 } else {
                     ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                     ctx.result("La plante n'a pas terminé de pousser!");
                 }
-            }
-            catch(NumberFormatException numberFormatException) {
+            } catch (NumberFormatException numberFormatException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("Le format du paramètre plantId n'est pas valable !");
-            }
-            catch(NullPointerException nullPointerException) {
+            } catch (NullPointerException nullPointerException) {
                 ctx.status(HttpStatus.NOT_ACCEPTABLE);
                 ctx.result("La plante recherchée n'existe pas !");
             }
