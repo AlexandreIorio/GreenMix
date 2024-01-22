@@ -10,14 +10,14 @@
 
 # Table of Contents
 
-- [1. What the Web Application is For](#what-the-web-application-is-for)
-- [2. API](#API)
-- [3. Group composition and roles](#Group-composition-and-roles)
-- [4. How to install and configure the server](#How-to-install-and-configure-the-server)
-- [5. How to deploy, run and access the web application](#How-to-deploy-run-and-access-the-web-application)
-- [6. How to configure the DNS zone to access the web application](#How-to-configure-the-DNS-zone-to-access-the-web-application)
-- [7. How to build and publish the web application with Docker](#How-to-build-and-publish-the-web-application-with-Docker)
-- [8. How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
+- [What the Web Application is For](#what-the-web-application-is-for)
+- [API](#API)
+- [How to install and configure the server](#How-to-install-and-configure-the-server)
+- [How to build and publish the web application with Docker](#How-to-build-and-publish-the-web-application-with-Docker)
+- [How to configure the DNS zone to access the web application](#How-to-configure-the-DNS-zone-to-access-the-web-application)
+- [How to deploy, run and access the web application](#How-to-deploy-run-and-access-the-web-application)
+- [How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
+- [Group composition and roles](#Group-composition-and-roles)
 
 <br>
 
@@ -126,43 +126,7 @@ strategic resource management.
 
 ---
 
-## Group composition and roles
-
-1. **Alexandre Iorio** - Role: Coordination and Management
-    - Responsibilities:
-        - Communication with other groups and teachers.
-        - Preparation and presentation of the project.
-        - Managing the GitHub repository and writing the README.
-
-
-2. **Colin Jaques** - Role: Software Architecture
-    - Responsibilities:
-        - Collaboration with the Back-end Developer for API integration.
-        - Implementation of the CRUD API on the virtual machine.
-        - DNS configuration for access via domain name.
-        - Ensuring the security and availability of the web application.
-
-
-3. **Theodros Mulugeta** - Role: System Administration
-    - Responsibilities:
-        - Configuration and management of the virtual machine.
-        - Installation of Docker and Docker Compose on the VM.
-        - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
-
-
-4. **Walid Slimani** - Role: Back-end Software Development
-    - Responsibilities:
-        - Development of server-side logic and database.
-        - Implementation of the CRUD API on the virtual machine.
-        - Collaboration for API integration.
-
-<br>
-
----
-
 ## How to install and configure the server
-
-
 
 ### Access the virtual machine
 
@@ -300,6 +264,54 @@ Docker Compose version vN.N.N
 
 ---
 
+## How to build and publish the web application with Docker
+
+### Clone and build the repository.
+
+1. Clone the repository:
+```sh
+git clone https://github.com/AlexandreIorio/GreenMix.git
+```
+
+2. Change to the project directory:
+```sh
+cd GreenMix
+```
+
+3. Build the web application:
+```sh
+# Download the dependencies
+./mvnw dependency:resolve clean compile
+
+# Package the application
+./mvnw package
+```
+
+<br>
+
+### Once the Jar are generated, you can build the docker images.
+
+1. Navigate to the project's directory.
+2. Build the image using the Docker build command.
+  ```bash
+  docker build -t ghcr.io/theodrosrun/greenmix:v1.0 .
+  ```
+be sure to adapt the version number as needed.
+
+<br>
+
+### Publishing to GitHub
+
+After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
+
+```sh
+docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0
+```
+
+<br>
+
+---
+
 ## How to configure the DNS zone to access the web application
 
 The DNS setup for `greenmix.dedyn.io` is configured through deSEC, a DNS hosting service. To direct traffic to our web applications, subdomains are used. Here's how they are currently configured:
@@ -353,60 +365,12 @@ docker-compose up
 
 2. **Interacting with the Application**:
 
-For interaction see the chapter: [8. How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
+For interaction see the chapter: [How to interact with the web application with examples and outputs using curl](#How-to-interact-with-the-web-application-with-examples-and-outputs-using-curl)
 
 
 3. **Shutting down the Application**:
 ```bash
 docker-compose down
-```
-
-<br>
-
----
-
-## How to build and publish the web application with Docker
-
-### Clone and build the repository.
-
-1. Clone the repository:
-```sh
-git clone https://github.com/AlexandreIorio/GreenMix.git
-```
-
-2. Change to the project directory:
-```sh
-cd GreenMix
-```
-
-3. Build the web application:
-```sh
-# Download the dependencies
-./mvnw dependency:resolve clean compile
-
-# Package the application
-./mvnw package
-```
-
-<br>
-
-### Once the Jar are generated, you can build the docker images.
-
-1. Navigate to the project's directory. 
-2. Build the image using the Docker build command.
-  ```bash
-  docker build -t ghcr.io/theodrosrun/greenmix:v1.0 .
-  ```
-be sure to adapt the version number as needed.
-
-<br>
-
-### Publishing to GitHub
-
-After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
-
-```sh
-docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0
 ```
 
 <br>
@@ -580,3 +544,39 @@ curl -X GET http://app.greenmix.dedyn.io/garden
   null
 ]
 ```
+
+<br>
+
+---
+
+## Group composition and roles
+
+1. **Alexandre Iorio** - Role: Coordination and Management
+    - Responsibilities:
+        - Communication with other groups and teachers.
+        - Preparation and presentation of the project.
+        - Managing the GitHub repository and writing the README.
+
+
+2. **Colin Jaques** - Role: Software Architecture
+    - Responsibilities:
+        - Collaboration with the Back-end Developer for API integration.
+        - Implementation of the CRUD API on the virtual machine.
+        - DNS configuration for access via domain name.
+        - Ensuring the security and availability of the web application.
+
+
+3. **Theodros Mulugeta** - Role: System Administration
+    - Responsibilities:
+        - Configuration and management of the virtual machine.
+        - Installation of Docker and Docker Compose on the VM.
+        - Configuration of the reverse proxy (Traefik) and management of HTTPS certificates.
+
+
+4. **Walid Slimani** - Role: Back-end Software Development
+    - Responsibilities:
+        - Development of server-side logic and database.
+        - Implementation of the CRUD API on the virtual machine.
+        - Collaboration for API integration.
+
+<br>
