@@ -51,7 +51,7 @@ public class PlantationController {
         sb.append("<h1>Liste des plantes</h1>\n");
 
         for (PlantType p : PlantType.values()) {
-            sb.append("<a href=\"/grow/").append(p).append("\">").append(p).append("</a>\n");
+            sb.append("<li><a href=\"/grow/").append(p).append("\">").append(p).append("</a></li>\n");
         }
         return sb.toString();
     }
@@ -63,7 +63,7 @@ public class PlantationController {
                 "<link rel=\"stylesheet\" href=\"style.css\">\n" +
                 "</head>" +
                 "<h1>Mon jardin</h1>" +
-                "<table style=\"border:1px solid #000000\">");
+                "<table>");
         int i = 0;
         for (Plant p : customer.getPlants()) {
             if (i == 0) {
@@ -94,8 +94,7 @@ public class PlantationController {
         sb.append("<a href=\"/menu\">Menu</a>\n");
         return sb.toString();
     }
-
-    public static String getIsGrowing(PlantType type) {
+    public static String getIsGrowingHtml(PlantType type) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -109,8 +108,7 @@ public class PlantationController {
         sb.append("<a href=\"/profileview\">voir mon jardin</a>\n");
         return sb.toString();
     }
-
-    public static String getHarvested(PlantType type, double profit) {
+    public static String getHarvestedHtml(double profit) {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -118,7 +116,7 @@ public class PlantationController {
                 "<link rel=\"stylesheet\" href=\"style.css\">\n" +
                 "</head>" +
                 "<h1>Bravo</h1>\n");
-        sb.append("<p>"+type+" a été récoltée !"+"</p>\n");
+        sb.append("<p>Belle recolte !"+"</p>\n");
         sb.append("<p>tu as gagné "+profit+" $</p>\n");
         sb.append("<a href=\"/menu\">retourner au menu</a><br>\n");
         sb.append("<a href=\"/profileview\">voir mon jardin</a>\n");
@@ -199,7 +197,7 @@ public class PlantationController {
 
                 if (growPlant(customer, type)) {
                     ctx.status(HttpStatus.OK);
-                    ctx.html(getIsGrowing(type));
+                    ctx.html(getIsGrowingHtml(type));
                 } else {
                     ctx.status(HttpStatus.PAYMENT_REQUIRED);
                     ctx.result("Pas assez d'argent pour acheter une graine de plante " + type);
@@ -219,7 +217,7 @@ public class PlantationController {
                     double newWalletValue = customer.getWallet();
                     double profit = newWalletValue - oldWalletValue;
                     ctx.status(HttpStatus.OK);
-                    ctx.html(getHarvested(customer.getPlantById(id).getPlantType(), profit));
+                    ctx.html(getHarvestedHtml(profit));
                 } else {
                     ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                     ctx.result("La plante n'a pas terminé de pousser!");
