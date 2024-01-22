@@ -1,6 +1,5 @@
 ﻿# 1. Docker volumes
 treafik/*
-treafik/secrets/auth-users.txt
 
 # 2. Intellij IDEA
 
