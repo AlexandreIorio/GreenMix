@@ -8,7 +8,7 @@ import io.javalin.http.HttpStatus;
 
 public class PlantationController {
     // region public Const
-    public static final int PORT = 8080;
+    public static final int PORT = 80;
     // endregion
 
     // region Private Methods
