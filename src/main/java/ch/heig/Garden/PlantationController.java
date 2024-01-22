@@ -37,7 +37,13 @@ public class PlantationController {
 
     // region Main with HTTP Request
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(PORT);
+        int port = PORT;
+
+        if (args.length == 1) {
+            port = Integer.parseInt(args[0]);
+        }
+
+        Javalin app = Javalin.create().start(port);
         Customer customer = new Customer("Jerry", 5.0);
 
         // Customer
