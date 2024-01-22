@@ -90,7 +90,7 @@ services:
 
   # Greenmix
   greenmix:
-    image: ...
+    image: ghcr.io/theodrosrun/greenmix:v1.0
     networks:
       - traefik
     expose:
