@@ -395,7 +395,7 @@ cd GreenMix
 1. Navigate to the project's directory. 
 2. Build the image using the Docker build command.
   ```bash
-  docker build -t ghcr.io/theodrosrun/greenmix:v1.0.0 .
+  docker build -t ghcr.io/theodrosrun/greenmix:v1.0 .
   ```
 be sure to adapt the version number as needed.
 
@@ -406,7 +406,7 @@ be sure to adapt the version number as needed.
 After building the images, you can publish them to github. Be sure to be logged and have right to publish image. Once done, you can publish it to github by using :
 
 ```sh
-docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0.0
+docker push ghcr.io/theodrosrun/greenmix:v1.0.0:v1.0
 ```
 
 <br>
