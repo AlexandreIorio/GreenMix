@@ -38,7 +38,7 @@ strategic resource management.
     - Enables users to grow a variety of plants with unique care requirements and timelines.
 
 2. **Use of Potions**
-    - Offers special potions to enhance plant growth, increase yield, or protect against pests.
+    - Offers special potions to enhance plant growth, increase yield.
 
 3. **Real-Time Plant Growth**
     - Plants grow in real-time, requiring ongoing care and attention from the user.
