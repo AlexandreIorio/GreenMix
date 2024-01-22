@@ -1,8 +1,12 @@
 body {
     font-family: Arial;
 }
+
+td{
+    padding-right: 20px;
+}
+
 .plant, plant-growed{
-    margin-right: 20px;
     box-shadow: 4px 4px 10px 0 rgba(0,0,0,0.5);
     transition: 0.3s;
 }
@@ -20,4 +24,9 @@ img {
 }
 h1 {
     color: #639979;
+}
+h2 {
+    color: #639979;
+    text-align: center;
+    font-size: 22px;
 }

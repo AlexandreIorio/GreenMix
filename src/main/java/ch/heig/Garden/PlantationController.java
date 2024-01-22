@@ -39,11 +39,7 @@ public class PlantationController {
     // region static methods
     public static String getMenuHtml(Customer customer){
         StringBuilder sb = new StringBuilder();
-        sb.append("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
-                "</head>" +
+        sb.append(getHeaderHtml() +
                 "<h1>Mon wallet</h1>\n");
         sb.append("<p>Solde du compte: ").append(customer.getWallet()).append(" $</p>\n");
         sb.append("<a href=\"/mygarden\">Mon jardin</a>\n");
@@ -56,11 +52,7 @@ public class PlantationController {
     }
     public static String getGardenHtml(Customer customer) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
-                "</head>" +
+        sb.append(getHeaderHtml() +
                 "<h1>Mon jardin</h1>" +
                 "<table>");
         int i = 0;
@@ -69,16 +61,26 @@ public class PlantationController {
                 sb.append("<tr>");
             }
             sb.append("<td>");
+
             if (p != null) {
+                String cssClass = p.getHasGrown() ? "plant-growed" : "plant";
+                String canClick = p.getHasGrown() ? "href=\"/harvest/" : "";
+                if (p.getHasGrown()) {
+                    sb.append("<a href=\"/harvest/").append(p.getId()).append("\">");
+                }else {
+                    sb.append("<a>");
+                }
+
+                sb.append("<div class=\""+cssClass+"\">");
                 sb.append("<h2>").append(p.getType()).append("</h2>");
                 String harvest = p.getHasGrown() ? "Oui" : "Non";
                 sb.append("<p>").append("Recoltable: ").append(harvest).append("</p>");
                 String image = p.getPlantType().getImageFileName();
                 sb.append("<img src=\"").append(image).append("\"/><br>");
-                if (p.getHasGrown()) {
-                    sb.append("<a href=\"/harvest/").append(p.getId()).append("\">Recolter</a>");
-                }
+                sb.append("</div>");
+                sb.append("</a>");
             }
+
             sb.append("</td>");
             if (i == 2) {
                 sb.append("</tr>");
@@ -95,11 +97,7 @@ public class PlantationController {
     }
     public static String getIsGrowingHtml(PlantType type) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
-                "</head>" +
+        sb.append(getHeaderHtml() +
                 "<h1>Youpiiii</h1>\n");
         sb.append("<p>"+type+" est en train de pousser !"+"</p>\n");
         sb.append("<p>tu pourras la recolter dans "+type.getDuration()+" secondes"+"</p>\n");
@@ -109,17 +107,21 @@ public class PlantationController {
     }
     public static String getHarvestedHtml(double profit) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
-                "</head>" +
+        sb.append(getHeaderHtml() +
                 "<h1>Bravo</h1>\n");
         sb.append("<p>Belle recolte !"+"</p>\n");
-        sb.append("<p>tu as gagné "+profit+" $</p>\n");
+        sb.append("<p>tu as gagne "+profit+" $</p>\n");
         sb.append("<a href=\"/menu\">retourner au menu</a><br>\n");
         sb.append("<a href=\"/mygarden\">voir mon jardin</a>\n");
         return sb.toString();
+    }
+
+    public static String getHeaderHtml() {
+        return "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "<link rel=\"stylesheet\" href=\"style.css\">\n" +
+                "</head>";
     }
 
     // endregion
