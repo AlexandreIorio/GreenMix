@@ -1,4 +1,5 @@
 ﻿# 1. Docker volumes
+letsencrypt/*
 treafik/*
 
 # 2. Intellij IDEA
