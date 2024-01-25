@@ -5,6 +5,7 @@ import ch.heig.Customer.Customers;
 import ch.heig.Potion.Potion;
 import ch.heig.Potion.PotionType;
 import io.javalin.Javalin;
+import io.javalin.config.JavalinConfig;
 import io.javalin.http.HttpStatus;
 
 public class PlantationController {
@@ -15,15 +16,27 @@ public class PlantationController {
 
         int port = PORT;
 
+
+
+
         if (args.length == 1) {
             port = Integer.parseInt(args[0]);
         }
 
+
         Javalin app = Javalin.create().start(port);
+        // Configuration des en-têtes CORS
+        app.before(ctx -> {
+            ctx.header("Access-Control-Allow-Origin", "null"); // Autoriser l'origine locale
+            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            ctx.header("Access-Control-Allow-Credentials", "true"); // Autoriser les cookies
+        });
+
         Customer customer = new Customer("Jerry", 5.0);
 
         // create connect request with username and password
-        app.post("/connect/{username}/{password}", ctx -> {
+        app.get("/connect/{username}/{password}", ctx -> {
             String username = ctx.pathParam("username");
             String password = ctx.pathParam("password");
 
@@ -36,10 +49,10 @@ public class PlantationController {
             } else if (Customers.resolveUser(username, password) != null) {
                 ctx.cookie(Customers.logUser(username));
                 ctx.status(HttpStatus.OK);
-                ctx.result("Connexion réussite !");
+                ctx.result("Connexion reussite !");
             } else {
                 ctx.status(HttpStatus.UNAUTHORIZED);
-                ctx.result("Connexion échouée !");
+                ctx.result("Connexion echouee !");
             }
         });
 

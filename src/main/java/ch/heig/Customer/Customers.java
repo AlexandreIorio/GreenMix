@@ -50,11 +50,11 @@ public class Customers {
         }
     }
 
-    public static void createUser(String username, String hash) {
+    public static void createUser(String username, String passwordHash) {
         if (customers.containsKey(username)) {
             throw new RuntimeException("User already exists");
         } else {
-            customers.put(username, new Customer(username, hash, 0));
+            customers.put(username, new Customer(username, passwordHash, 0));
         }
     }
 }
