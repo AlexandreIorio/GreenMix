@@ -1,7 +1,9 @@
 package ch.heig.Customer;
 
 import ch.heig.Garden.Plant;
+import ch.heig.Garden.PlantType;
 import ch.heig.Potion.Potion;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,20 @@ public class Customer {
 
     // region Private Parameters
     private String username;
+    private String hashcode;
     private double wallet;
     private final Plant[] plants;
     private final List<Tool> tools = new ArrayList<>();
     // endregion
+
+    public Customer(String username, String hash, double wallet) {
+        this.username = username;
+        this.hashcode = hash;
+        this.wallet = wallet;
+        this.plants = new Plant[MAX_PLANTS];
+        this.tools.add(new Tool("FOURCHE"));
+        this.tools.add(new Tool("CISAILLE"));
+    }
 
     // region Ctor
     public Customer(String username, double wallet) {
@@ -30,7 +42,7 @@ public class Customer {
     // region Public Methods
 
     // Getter method
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
@@ -42,16 +54,16 @@ public class Customer {
         return plants;
     }
 
-    public List<Tool> getTools(){
+    public List<Tool> getTools() {
         return tools;
     }
 
     // API method
-    public void addMoney(double money){
+    public void addMoney(double money) {
         wallet += money;
     }
 
-    public void updateUsername(String username){
+    public void updateUsername(String username) {
         this.username = username;
     }
 
@@ -60,11 +72,12 @@ public class Customer {
     }
 
     // Plantation method
-    public boolean plantPlant(Plant plant) {
+    public boolean plantPlant(PlantType type) {
+        Plant plant = new Plant(type);
+
         if (wallet < plant.getPurchasePrice()) {
             return false;
-        }
-        else {
+        } else {
             wallet -= plant.getPurchasePrice();
             addPlantToGarden(plant);
             plant.grow();
@@ -78,17 +91,25 @@ public class Customer {
             wallet += profit;
             removePlantFromGarden(plant);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
+    }
+
+    public boolean harvestPlant(int targetId) {
+        Plant plant = getPlantById(targetId);
+
+        if (plant == null)
+            throw new NullPointerException("Plant not found");
+        else
+            return harvestPlant(plant);
+
     }
 
     public boolean usePotion(Potion potion, Plant plant) {
         if (wallet < potion.getPrice()) {
             return false;
-        }
-        else {
+        } else {
             wallet -= potion.getPrice();
             potion.usePotion(plant);
             return true;
@@ -105,7 +126,7 @@ public class Customer {
     }
 
     public void addPlantToGarden(Plant plant) {
-        for (int i = 0; i < plants.length; ++ i) {
+        for (int i = 0; i < plants.length; ++i) {
             if (plants[i] == null) {
                 plants[i] = plant;
                 break;
@@ -120,6 +141,10 @@ public class Customer {
                 break;
             }
         }
+    }
+
+    public boolean connect(String hashcode) {
+        return this.hashcode.equals(hashcode);
     }
     // endregion
 }
