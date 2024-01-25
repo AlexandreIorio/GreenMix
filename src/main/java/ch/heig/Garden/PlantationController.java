@@ -1,53 +1,62 @@
 package ch.heig.Garden;
 
 import ch.heig.Customer.Customer;
+import ch.heig.Customer.Customers;
 import ch.heig.Potion.Potion;
 import ch.heig.Potion.PotionType;
 import io.javalin.Javalin;
+import io.javalin.config.JavalinConfig;
 import io.javalin.http.HttpStatus;
 
 public class PlantationController {
-    // region public Const
     public static final int PORT = 80;
-    // endregion
 
-    // region Private Methods
-    private static boolean growPlant(Customer customer, PlantType type) {
-        Plant plant = new Plant(type);
-        return customer.plantPlant(plant);
-    }
-
-    private static boolean harvestPlant(Customer customer, int plantId) {
-        Plant plant = customer.getPlantById(plantId);
-        if (plant == null) {
-            throw new NullPointerException();
-        }
-        return customer.harvestPlant(plant);
-    }
-
-    public static boolean usePotion(Customer customer, PotionType type, int plantId) {
-        Plant plant = customer.getPlantById(plantId);
-        if (plant == null) {
-            throw new NullPointerException();
-        }
-        Potion potion = Potion.PotionFactory.createPotion(type);
-        return customer.usePotion(potion, plant);
-    }
-    // endregion
-
-    // region Main with HTTP Request
     public static void main(String[] args) {
+        Customers.createUser("Jerry", "5f4dcc3b5aa765d61d8327deb882cf99");
+
         int port = PORT;
+
+
+
 
         if (args.length == 1) {
             port = Integer.parseInt(args[0]);
         }
 
+
         Javalin app = Javalin.create().start(port);
+        // Configuration des en-têtes CORS
+        app.before(ctx -> {
+            ctx.header("Access-Control-Allow-Origin", "null"); // Autoriser l'origine locale
+            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            ctx.header("Access-Control-Allow-Credentials", "true"); // Autoriser les cookies
+        });
+
         Customer customer = new Customer("Jerry", 5.0);
 
-        // Customer
-        app.get("/profile", ctx ->  {
+        // create connect request with username and password
+        app.get("/connect/{username}/{password}", ctx -> {
+            String username = ctx.pathParam("username");
+            String password = ctx.pathParam("password");
+
+            if (username.isBlank() || username.isEmpty()) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Le format du paramètre {username} n'est pas valable !");
+            } else if (password.isBlank() || password.isEmpty()) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Le format du paramètre {password} n'est pas valable !");
+            } else if (Customers.resolveUser(username, password) != null) {
+                ctx.cookie(Customers.logUser(username));
+                ctx.status(HttpStatus.OK);
+                ctx.result("Connexion reussite !");
+            } else {
+                ctx.status(HttpStatus.UNAUTHORIZED);
+                ctx.result("Connexion echouee !");
+            }
+        });
+
+        app.get("/profile", ctx -> {
             ctx.status(HttpStatus.OK);
             ctx.json(customer);
         });
@@ -88,22 +97,20 @@ public class PlantationController {
             }
         });
 
-        // Plantation
         app.get("/grow/{plantType}", ctx -> {
             String plantType = "";
             try {
                 plantType = ctx.pathParam("plantType").toUpperCase();
                 PlantType type = PlantType.valueOf(plantType);
 
-                if (growPlant(customer, type)) {
+                if (customer.plantPlant(type)) {
                     ctx.status(HttpStatus.OK);
                     ctx.result("La plante " + type + " est en train de pousser!");
                 } else {
                     ctx.status(HttpStatus.PAYMENT_REQUIRED);
                     ctx.result("Pas assez d'argent pour acheter une graine de plante " + type);
                 }
-            }
-            catch (IllegalArgumentException illegalArgumentException) {
+            } catch (IllegalArgumentException illegalArgumentException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("La plante " + plantType.toUpperCase() + " n'existe pas !");
             }
@@ -114,7 +121,7 @@ public class PlantationController {
                 double oldWalletValue = customer.getWallet();
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
 
-                if (harvestPlant(customer, id)) {
+                if (customer.harvestPlant(id)) {
                     double newWalletValue = customer.getWallet();
                     double profit = newWalletValue - oldWalletValue;
                     ctx.status(HttpStatus.OK);
@@ -123,21 +130,18 @@ public class PlantationController {
                     ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                     ctx.result("La plante n'a pas terminé de pousser!");
                 }
-            }
-            catch(NumberFormatException numberFormatException) {
+            } catch (NumberFormatException e) {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("Le format du paramètre plantId n'est pas valable !");
-            }
-            catch(NullPointerException nullPointerException) {
+            } catch (NullPointerException e) {
                 ctx.status(HttpStatus.NOT_ACCEPTABLE);
-                ctx.result("La plante recherchée n'existe pas !");
+                ctx.result(e.getMessage());
             }
         });
 
         app.get("/potion/{potionType}/{plantId}", ctx -> {
-            String type = "";
             try {
-                type = ctx.pathParam("potionType").toUpperCase();
+                String type = ctx.pathParam("potionType").toUpperCase();
                 PotionType potionType = PotionType.valueOf(type);
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
 
@@ -148,25 +152,30 @@ public class PlantationController {
                     ctx.status(HttpStatus.PAYMENT_REQUIRED);
                     ctx.result("Pas assez d'argent pour acheter la potion " + potionType);
                 }
-            }
-            catch (NumberFormatException numberFormatException) {
+            } catch (NumberFormatException numberFormatException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("Le format du paramètre plantId n'est pas valable !");
-            }
-            catch (IllegalArgumentException illegalArgumentException) {
+            } catch (IllegalArgumentException illegalArgumentException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
-                ctx.result("La potion " + type.toUpperCase() + " n'existe pas !");
-            }
-            catch (NullPointerException nullPointerException) {
+                ctx.result("La potion " + ctx.pathParam("potionType").toUpperCase() + " n'existe pas !");
+            } catch (NullPointerException nullPointerException) {
                 ctx.status(HttpStatus.NOT_ACCEPTABLE);
                 ctx.result("La plante recherchée n'existe pas !");
             }
         });
 
-        app.get("/garden", ctx ->  {
+        app.get("/garden", ctx -> {
             ctx.status(HttpStatus.OK);
             ctx.json(customer.getPlants());
         });
     }
-    // endregion
+
+    public static boolean usePotion(Customer customer, PotionType type, int plantId) {
+        Plant plant = customer.getPlantById(plantId);
+        if (plant == null) {
+            throw new NullPointerException();
+        }
+        Potion potion = Potion.PotionFactory.createPotion(type);
+        return customer.usePotion(potion, plant);
+    }
 }
