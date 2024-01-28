@@ -18,18 +18,22 @@ public class Customer {
     private double wallet;
     private final Plant[] plants;
     private final List<Tool> tools = new ArrayList<>();
+    private int id;
     // endregion
 
-    public Customer(String username, String hash, double wallet) {
-        this.username = username;
-        this.hashcode = hash;
-        this.wallet = wallet;
-        this.plants = new Plant[MAX_PLANTS];
-        this.tools.add(new Tool("FOURCHE"));
-        this.tools.add(new Tool("CISAILLE"));
-    }
+
+
 
     // region Ctor
+    public Customer(int id, String username, String hash, double wallet) {
+
+        this(username, hash, wallet);
+        this.id = id;
+    }
+    public Customer(String username, String hash, double wallet) {
+        this(username, wallet);
+        this.hashcode = hash;
+    }
     public Customer(String username, double wallet) {
         this.username = username;
         this.wallet = wallet;
@@ -42,8 +46,17 @@ public class Customer {
     // region Public Methods
 
     // Getter method
+
+    public int getId() {
+        return id;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public String getHashcode() {
+        return hashcode;
     }
 
     public double getWallet() {
@@ -56,6 +69,11 @@ public class Customer {
 
     public List<Tool> getTools() {
         return tools;
+    }
+
+    // setter method
+    public void setId(int id) {
+        this.id = id;
     }
 
     // API method
@@ -146,5 +164,7 @@ public class Customer {
     public boolean connect(String hashcode) {
         return this.hashcode.equals(hashcode);
     }
+
+
     // endregion
 }

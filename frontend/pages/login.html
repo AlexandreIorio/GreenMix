@@ -4,14 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login</title>
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body>
         <h1>Login</h1>
         <table>
             <tr>
                 <td>
-                    <label for="login">Login</label>
+                    <label>Login</label>
                 </td>
                 <td>
                     <input type="text" id="tb-username">
@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="password">Password</label>
+                    <label>Password</label>
                 </td>
                 <td>
                     <input type="password" id="tb-password">
@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <button id="btn-submit" onclick="login()">Login</button>
+                    <button id="btn-login">Se connecter</button>
                 </td>
             </tr>
             <tr>
@@ -35,8 +35,8 @@
                     <p id="error-message"></p>
                 </td>
         </table>
-        <script src="../js/login.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+        <script  src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+        <script type="module"  src="../assets/js/login.js"></script>
     </body>
 </html>

@@ -2,38 +2,60 @@ package ch.heig.Garden;
 
 import ch.heig.Customer.Customer;
 import ch.heig.Customer.Customers;
+import ch.heig.Database.CustomerDAO;
 import ch.heig.Potion.Potion;
 import ch.heig.Potion.PotionType;
 import io.javalin.Javalin;
-import io.javalin.config.JavalinConfig;
+import io.javalin.http.Cookie;
 import io.javalin.http.HttpStatus;
 
 public class PlantationController {
     public static final int PORT = 80;
+    public static String COOKIE_NAME = "conn";
 
     public static void main(String[] args) {
-        Customers.createUser("Jerry", "5f4dcc3b5aa765d61d8327deb882cf99");
 
         int port = PORT;
-
-
-
 
         if (args.length == 1) {
             port = Integer.parseInt(args[0]);
         }
 
+        Javalin app = Javalin.create(config -> {
+            config.plugins.enableCors(cors -> {
+                cors.add(it -> {
+                    it.anyHost();
+                });
+            });
+        }).start(port);
+// Gestionnaire de requêtes OPTIONS
+//        app.options("/*", ctx -> {
+//            ctx.header("Access-Control-Allow-Origin", "*"); // Autoriser toutes les origines (à restreindre en production)
+//            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//            ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-ijt"); // Autoriser x-ijt
+//            ctx.header("Access-Control-Allow-Credentials", "true"); // Autoriser les cookies
+//            ctx.status(HttpStatus.OK);
+//        });
 
-        Javalin app = Javalin.create().start(port);
-        // Configuration des en-têtes CORS
-        app.before(ctx -> {
-            ctx.header("Access-Control-Allow-Origin", "null"); // Autoriser l'origine locale
-            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-            ctx.header("Access-Control-Allow-Credentials", "true"); // Autoriser les cookies
+        app.post("/newuser/{username}/{password}", ctx -> {
+            String username = ctx.pathParam("username");
+            String password = ctx.pathParam("password");
+
+            if (username.isBlank() || username.isEmpty()) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Le format du paramètre {username} n'est pas valable !");
+            } else if (password.isBlank() || password.isEmpty()) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+                ctx.result("Le format du paramètre {password} n'est pas valable !");
+            } else if (Customers.resolveUser(username, password) != null) {
+                ctx.status(HttpStatus.CONFLICT);
+                ctx.result("L'utilisateur " + username + " existe déjà !");
+            } else {
+                Customers.createUser(username, password);
+                ctx.status(HttpStatus.CREATED);
+                ctx.result("L'utilisateur " + username + " a été créé avec succès !");
+            }
         });
-
-        Customer customer = new Customer("Jerry", 5.0);
 
         // create connect request with username and password
         app.get("/connect/{username}/{password}", ctx -> {
@@ -47,9 +69,12 @@ public class PlantationController {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("Le format du paramètre {password} n'est pas valable !");
             } else if (Customers.resolveUser(username, password) != null) {
-                ctx.cookie(Customers.logUser(username));
+                Cookie cookie = new Cookie(COOKIE_NAME, Customers.logUser(username));
+                cookie.setMaxAge(3600);
+                cookie.setHttpOnly(false);
+                ctx.cookie(cookie);
                 ctx.status(HttpStatus.OK);
-                ctx.result("Connexion reussite !");
+                ctx.result("Connexion reussie !");
             } else {
                 ctx.status(HttpStatus.UNAUTHORIZED);
                 ctx.result("Connexion echouee !");
@@ -57,13 +82,25 @@ public class PlantationController {
         });
 
         app.get("/profile", ctx -> {
-            ctx.status(HttpStatus.OK);
-            ctx.json(customer);
+
+            Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
+            if (customer == null) {
+                ctx.status(HttpStatus.UNAUTHORIZED);
+                ctx.result("Vous n'êtes pas connecté !");
+            } else {
+                ctx.status(HttpStatus.OK);
+                ctx.json(customer);
+            }
         });
 
         app.post("/profile/wallet/{money}", ctx -> {
             try {
-                customer.addMoney(Double.parseDouble(ctx.pathParam("money")));
+                //get customer from cookie
+                Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
+                double money = Double.parseDouble(ctx.pathParam("money"));
+                customer.addMoney(money);
+                CustomerDAO.updateCustomer(customer);
+
                 ctx.status(HttpStatus.OK);
             } catch (NumberFormatException numberFormatException) {
                 ctx.status(HttpStatus.BAD_REQUEST);
@@ -78,7 +115,11 @@ public class PlantationController {
                 ctx.status(HttpStatus.BAD_REQUEST);
                 ctx.result("Le format du paramètre {username} n'est pas valable !");
             } else {
+                Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
                 customer.updateUsername(username);
+                CustomerDAO.updateCustomer(customer);
+                Customers.updateLoggedUser(ctx.cookie(COOKIE_NAME), username);
+
                 ctx.status(HttpStatus.OK);
                 ctx.result("Modification du username réussite !");
             }
@@ -86,7 +127,7 @@ public class PlantationController {
 
         app.delete("/profile/tool/{tool}", ctx -> {
             String toolToRemove = ctx.pathParam("tool");
-            boolean result = customer.deleteTool(toolToRemove);
+            boolean result = Customers.resolveCookie(ctx.cookie(COOKIE_NAME)).deleteTool(toolToRemove);
 
             if (result) {
                 ctx.status(HttpStatus.OK);
@@ -103,7 +144,7 @@ public class PlantationController {
                 plantType = ctx.pathParam("plantType").toUpperCase();
                 PlantType type = PlantType.valueOf(plantType);
 
-                if (customer.plantPlant(type)) {
+                if (Customers.resolveCookie(COOKIE_NAME).plantPlant(type)) {
                     ctx.status(HttpStatus.OK);
                     ctx.result("La plante " + type + " est en train de pousser!");
                 } else {
@@ -118,6 +159,7 @@ public class PlantationController {
 
         app.get("/harvest/{plantId}", ctx -> {
             try {
+                Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
                 double oldWalletValue = customer.getWallet();
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
 
@@ -144,6 +186,7 @@ public class PlantationController {
                 String type = ctx.pathParam("potionType").toUpperCase();
                 PotionType potionType = PotionType.valueOf(type);
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
+                Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
 
                 if (usePotion(customer, potionType, id)) {
                     ctx.status(HttpStatus.OK);
@@ -165,6 +208,7 @@ public class PlantationController {
         });
 
         app.get("/garden", ctx -> {
+            Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
             ctx.status(HttpStatus.OK);
             ctx.json(customer.getPlants());
         });

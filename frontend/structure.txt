@@ -1,0 +1,16 @@
+/htdocs
+    /assets
+        /css
+            - style.css
+        /js
+            - script.js
+        /images
+            - logo.png
+    /includes
+        - header.php
+        - footer.php
+    /pages
+        - about.php
+        - contact.php
+    - index.php
+    - .htaccess
