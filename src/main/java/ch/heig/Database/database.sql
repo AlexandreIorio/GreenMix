@@ -23,5 +23,5 @@ CREATE TABLE plants
     FOREIGN KEY (owner) REFERENCES customers (id)
 );
 
-INSERT INTO customers (username, email, hashcode) VALUES ('Jerry', 'jerry@greenmix.ch', '5f4dcc3b5aa765d61d8327deb882cf99');
-INSERT INTO customers (username, email, hashcode) VALUES ('Tom', 'tom@greenmix.ch', '5f4dcc3b5aa765d61d8327deb882cf99');
+INSERT INTO customers (username, email, hashcode, wallet) VALUES ('Jerry', 'jerry@greenmix.ch', '5f4dcc3b5aa765d61d8327deb882cf99', 78);
+INSERT INTO customers (username, email, hashcode, wallet) VALUES ('Tom', 'tom@greenmix.ch', '5f4dcc3b5aa765d61d8327deb882cf99', 5);

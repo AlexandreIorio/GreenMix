@@ -8,7 +8,31 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_USER: root
       POSTGRES_DB: greenmix
+    expose:
+      - "5432"
     ports:
       - "5432:5432"
     volumes:
       - ./database:/var/lib/postgresql/data
+
+  frontend_greenmix:
+    container_name: greenmix_frontend
+    build: ./docker/php
+    image: greenmix_frontend
+    volumes:
+      - ./docker/apache/server.pem:/etc/ssl/certs/server.pem
+      - ./docker/apache/server-key.pem:/etc/ssl/private/server-key.pem
+      - ./docker/apache/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./frontend:/var/www/html
+    ports:
+      - 8080:80
+      - 443:443
+    restart: always
+
+  # backend_greenmix:
+  #   image: greenmix_backend
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   expose:
+  #     - "8080"

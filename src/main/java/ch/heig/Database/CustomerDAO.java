@@ -1,6 +1,8 @@
 package ch.heig.Database;
 
 import ch.heig.Customer.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,8 +13,10 @@ import java.util.Map;
 public class CustomerDAO {
     private Connection connection;
 
-    public static Map<String, Customer> getCustomers() {
+    private static final Logger log = LoggerFactory.getLogger(CustomerDAO.class);
 
+    public static Map<String, Customer> getCustomers() {
+        log.info("Getting customers from database");
         String query = "SELECT * FROM customers ORDER BY id";
         try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
@@ -23,13 +27,16 @@ public class CustomerDAO {
                         rs.getString("hashcode"),
                         rs.getDouble("wallet")));
             }
+            log.info("Found {} customers", customers.size());
             return customers;
         } catch (SQLException e) {
+            log.error("Error while getting customers");
             e.printStackTrace();
         }
         return null;
     }
     public static Customer getCustomer(String username) {
+        log.info("Getting customer {} from database", username);
         String query = "SELECT * FROM customers WHERE username = ?";
         try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query)) {
             pstmt.setString(1, username);
@@ -38,6 +45,7 @@ public class CustomerDAO {
                 return new Customer(rs.getString("username"), rs.getString("hashcode"), rs.getDouble("wallet"));
             }
         } catch (SQLException e) {
+            log.error("Error while getting customer {}", username);
             e.printStackTrace();
         }
         return null;
