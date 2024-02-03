@@ -1,142 +1,87 @@
 package ch.heig.Garden;
 
-import ch.heig.Potion.MultiplicarePotion;
-import ch.heig.Potion.ReductoPotion;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import ch.heig.Database.PlantDAO;
+import ch.heig.Item.MultiplicarePotion;
+import ch.heig.Item.ReductoPotion;
+
+import java.util.Objects;
 
 public class Plant {
     // region Private Parameters
-    private int harvest;   // nombre de fruits récupéré à la récolte
-    private double duration; // temps pour que la plante pousse [s]
+    private double durationFactor = 1; // facteur de réduction/augmentation de temps de pousse
+    private double quantityFactor = 1; // facteur de réduction/augmentation de quantité de buds
+    private long plantingTime; // heure de plantation
+    private int id;
 
-    private double purchasePrice; // prix d'achat de la graine de la plante
-    private double sellingPrice;  // prix de vente d'une buds
 
-    private boolean hasGrown; // indique si la plante a finit de pousser
-
-    private static int nb;
-    private final int id = nb++;
-
-    //private Timer timer;
-    private ScheduledExecutorService scheduler;
-    private ScheduledFuture<?> growFuture;
-
-    private String type;
+    private PlantData plantType;
     // endregion
 
     // region Ctor
-    public Plant(PlantType type) {
-        CreatePlant(type);
+
+    public Plant(PlantType type, int ownerId) {
+        this.plantType = new PlantData(type);
+        plantingTime = System.currentTimeMillis()/1000;
+        this.id = Objects.requireNonNull(PlantDAO.createPlant(this, ownerId)).id;
+    }
+
+    public Plant(int id, String type, double duration_factor, double quantity_factor, long plantingTime) {
+        this.plantType = new PlantData(PlantType.valueOf(type));
+        this.id = id;
+        this.durationFactor = duration_factor;
+        this.quantityFactor = quantity_factor;
+        this.plantingTime = plantingTime;
     }
     // endregion
 
-    // region Public Methods
-    public void grow() {
-        scheduler = Executors.newScheduledThreadPool(1);
-        growFuture = scheduler.schedule(() -> {
-            // Logique de croissance ici
-            hasGrown = true;
-        }, (long) (duration * 1000), TimeUnit.MILLISECONDS);
-    }
-
-    public boolean canHarvest() {
-        if (hasGrown) {
-            hasGrown = false;
-            return true;
-        }
-        else {
-            return false;
-        }
+    public boolean hasGrown() {
+        return plantingTime + (long) (plantType.getDuration() * durationFactor) < System.currentTimeMillis()/1000;
     }
 
     public void reduceGrowTime(ReductoPotion reductoPotion) {
-        if (!hasGrown && growFuture != null) {
-            long timeRemaining = growFuture.getDelay(TimeUnit.SECONDS);
-            growFuture.cancel(true);
-            int newDuration = (int) (timeRemaining * reductoPotion.getGrowthReductionFactor());
-            this.duration = newDuration;
-            growFuture = scheduler.schedule(() -> {
-                // Logique de croissance ici
-                hasGrown = true;
-            }, newDuration, TimeUnit.SECONDS);
-        }
+        this.durationFactor *= reductoPotion.getGrowthReductionFactor();
     }
 
-    private void resetTimer() {
-        if (growFuture != null) {
-            growFuture.cancel(true);
-        }
-        grow();
+    public double getDurationFactor(){
+        return durationFactor;
+    }
+
+    public double getQuantityFactor(){
+        return quantityFactor;
+    }
+
+    public long getPlantingTime() {
+        return plantingTime;
     }
 
     public void multiplyHarvest(MultiplicarePotion multiplicarePotion) {
-        this.harvest *= multiplicarePotion.getHarvestMultiplicationFactor();
+        //this.quantityFactor *= multiplicarePotion.getHarvestMultiplicationFactor();
     }
 
     public int getHarvest() {
-        return harvest;
+        return plantType.getHarvest() ;
     }
 
     public double getPurchasePrice() {
-        return purchasePrice;
+        return plantType.getPurchasePrice();
     }
 
     public double getSellingPricePrice() {
-        return sellingPrice;
+        return plantType.getSellingPrice();
     }
 
-    public boolean getHasGrown() {
-        return hasGrown;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
-
-    public String getType() {
-        return this.type;
+    public PlantData getPlantType() {
+        return plantType;
     }
 
     public int getId() {
         return id;
     }
-    // endregion
 
-    // region Private Methods
-    private void CreatePlant(PlantType type) {
-        switch (type) {
-            case BITBUD:
-                initializePlant(3, 3, 5, 5., "BITBUD");
-                break;
-
-            case DEBUGDREAM:
-                initializePlant(1, 8, 11, 15., "DEBUGDREAM");
-                break;
-
-            case HASHHACK:
-                initializePlant(2, 5, 9, 10., "HASHHACK");
-                break;
-
-            case BYTEBLOOM:
-                initializePlant(1, 10, 14, 20., "BYTEBLOOM");
-                break;
-
-            case KERNELHAZE:
-                initializePlant(1, 15, 21, 30., "KERNELHAZE");
-                break;
-        }
-    }
-
-    private void initializePlant(int harvest, double purchasePrice, double sellingPrice, double duration, String type) {
-        this.harvest = harvest;
-        this.purchasePrice = purchasePrice;
-        this.sellingPrice = sellingPrice;
-        this. duration = duration;
-        this.hasGrown = false;
-        this.type = type;
+    public void setId(int id) {
+        this.id = id;
     }
     // endregion
+
+
 }

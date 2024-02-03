@@ -2,9 +2,9 @@ package ch.heig.Garden;
 
 import ch.heig.Customer.Customer;
 import ch.heig.Customer.Customers;
+import ch.heig.Customer.Ranking;
 import ch.heig.Database.CustomerDAO;
-import ch.heig.Potion.Potion;
-import ch.heig.Potion.PotionType;
+import ch.heig.Item.PotionType;
 import io.javalin.Javalin;
 import io.javalin.http.Cookie;
 import io.javalin.http.HttpStatus;
@@ -53,7 +53,7 @@ public class PlantationController {
                 cookie.setMaxAge(7200); // Définissez la durée de vie du cookie en secondes (1 heure dans cet exemple)
                 cookie.setPath("/"); // Définir le chemin du cookie (peut être modifié
                 cookie.setHttpOnly(false);
-                ctx.status(HttpStatus.CREATED);
+                ctx.status(HttpStatus.OK);
                 ctx.result("L'utilisateur " + username + " a été créé avec succès !");
             }
         });
@@ -90,6 +90,7 @@ public class PlantationController {
             if (customer == null) {
                 ctx.status(HttpStatus.UNAUTHORIZED);
                 ctx.result("Vous n'êtes pas connecté !");
+                return;
             } else {
                 ctx.status(HttpStatus.OK);
                 ctx.json(customer);
@@ -154,11 +155,48 @@ public class PlantationController {
             }
         });
 
+        app.get("/rank", ctx -> {
+            ctx.status(HttpStatus.OK);
+            ctx.json(Ranking.getRank());
+        });
+
+        app.get("/plantlist", ctx -> {
+            ctx.status(HttpStatus.OK);
+            ctx.json(PlantType.plantDatas);
+        });
+
+        app.get("/addspace", ctx -> {
+            Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
+            if (customer == null) {
+                ctx.status(HttpStatus.UNAUTHORIZED);
+                ctx.result("Vous n'êtes pas connecté !");
+                return;
+            }
+
+            try {
+                if (customer.addPlantSpace()) {
+                    ctx.status(HttpStatus.OK);
+                    ctx.result("Espaces de plantation ajoutés avec succès! Nombre d'espaces de plantation: " + customer.getPlantSpace());
+                } else {
+                    ctx.status(HttpStatus.PAYMENT_REQUIRED);
+                    ctx.result("Pas assez d'argent pour acheter un espace de plantation!");
+                }
+            } catch (IllegalArgumentException illegalArgumentException) {
+                ctx.status(HttpStatus.BAD_REQUEST);
+            }
+        });
+
         app.get("/grow/{plantType}", ctx -> {
             Customer customer = Customers.resolveCookie(ctx.cookie(COOKIE_NAME));
             if (customer == null) {
                 ctx.status(HttpStatus.UNAUTHORIZED);
                 ctx.result("Vous n'êtes pas connecté !");
+                return;
+            }
+            if (customer.getPlants().size() >= Garden.defineNbPlant(customer)) {
+                ctx.status(HttpStatus.NOT_ACCEPTABLE);
+                ctx.result("Vous avez atteint le nombre maximum de plantes !");
+                return;
             }
             String plantType = "";
             try {
@@ -184,6 +222,7 @@ public class PlantationController {
                 if (customer == null) {
                     ctx.status(HttpStatus.UNAUTHORIZED);
                     ctx.result("Vous n'êtes pas connecté !");
+                    return;
                 }
                 double oldWalletValue = customer.getWallet();
                 int id = Integer.parseInt(ctx.pathParam("plantId"));
@@ -251,7 +290,7 @@ public class PlantationController {
         if (plant == null) {
             throw new NullPointerException();
         }
-        Potion potion = Potion.PotionFactory.createPotion(type);
-        return customer.usePotion(potion, plant);
+        //Potion potion = Potion.PotionFactory.createPotion(type);
+        return false;// customer.usePotion(potion, plant);
     }
 }

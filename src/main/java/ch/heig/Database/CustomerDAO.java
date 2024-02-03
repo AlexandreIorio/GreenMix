@@ -1,31 +1,42 @@
 package ch.heig.Database;
 
 import ch.heig.Customer.Customer;
+import ch.heig.Garden.Plant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CustomerDAO {
-    private Connection connection;
+    private static Connection connection;
+    static {
+        try {
+            connection = Database.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private static final Logger log = LoggerFactory.getLogger(CustomerDAO.class);
 
     public static Map<String, Customer> getCustomers() {
         log.info("Getting customers from database");
         String query = "SELECT * FROM customers ORDER BY id";
-        try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
             Map<String, Customer> customers = new HashMap<>();
             while (rs.next()) {
-                customers.put(rs.getString("username"), new Customer(rs.getInt("id"),
+                Customer customer = new Customer(rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("hashcode"),
-                        rs.getDouble("wallet")));
+                        rs.getDouble("wallet"),
+                        rs.getInt("plant_space"),
+                        rs.getString("email"));
+                customer.setGarden(PlantDAO.getGrowingPlants(customer.getId()));
+                customer.setHarvestedPlants(PlantDAO.getHavrestedPlants(customer.getId()));
+                customers.put(rs.getString("username"), customer);
             }
             log.info("Found {} customers", customers.size());
             return customers;
@@ -35,25 +46,10 @@ public class CustomerDAO {
         }
         return null;
     }
-    public static Customer getCustomer(String username) {
-        log.info("Getting customer {} from database", username);
-        String query = "SELECT * FROM customers WHERE username = ?";
-        try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query)) {
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Customer(rs.getString("username"), rs.getString("hashcode"), rs.getDouble("wallet"));
-            }
-        } catch (SQLException e) {
-            log.error("Error while getting customer {}", username);
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public static Customer createCustomer(Customer customer) {
         String query = "INSERT INTO customers (username, hashcode, wallet) VALUES (?, ?, ?) RETURNING id";
-        try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, customer.getUsername());
             pstmt.setString(2, customer.getHashcode());
             pstmt.setDouble(3, customer.getWallet());
@@ -76,12 +72,14 @@ public class CustomerDAO {
     }
 
     public static void updateCustomer(Customer customer) {
-        String query = "UPDATE customers SET username = ?, wallet = ?, hashcode = ? , email = ? WHERE id = ?";
-        try (PreparedStatement pstmt = Database.getConnection().prepareStatement(query)) {
+        String query = "UPDATE customers SET username = ?, wallet = ?, hashcode = ? , email = ? , plant_space = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, customer.getUsername());
             pstmt.setDouble(2, customer.getWallet());
-
-            pstmt.setString(2, customer.getUsername());
+            pstmt.setString(3, customer.getHashcode());
+            pstmt.setString(4, customer.getEmail());
+            pstmt.setInt(5, customer.getPlantSpace());
+            pstmt.setInt(6, customer.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

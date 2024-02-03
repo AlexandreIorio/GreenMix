@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mon profile</title>
         <link rel="stylesheet" href="../assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/profile.css">
     </head>
     <body>
         <h1>Mon profile</h1>
-        <span id="username">userName</span><br>
-        <h2>Wallet</h2>
-        <span>Solde : </span><span id="wallet-amount">0.00</span><br>
-        <button id="btn-garten">Aller au jardin</button>
+        <div class="top-panel">
+            <div id="left-part">
+                <div id="profil-info">
+                    <div id="username">userName</div>
+                    <div id="xp-amount">xp</div>
+                    <div id="level-amount">level</div>
+                    <div id="progress-bar-container" style="width: 100%; background-color: #ddd;">
+                        <div id="progress-bar"></div>
+                    </div>
+                    <div id="progress-bar-text"></div>
+                    <span>Argent : </span><span id="wallet-amount">0.00</span><br>
+                    <a href="rank.html">Classement</a><br>
+                    <button id="btn-add-space" >Ajouter espace</button>
+                </div>
+                <div id="item-list-containder">
+                    <iframe id="itemlist" src="itemlist.html" width="100%"></iframe>
+                </div>
+            </div>
 
+            <div id="plant-list-container">
+                <iframe id="plantlist" src="plantlist.html" width="100%"></iframe>
+            </div>
+        </div>
+
+        <iframe id="garden" src="garden.html" width="100%" height="500px"></iframe>
         <script type="module" src="../assets/js/profile.js"></script>
     </body>

@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelector('button#btn-signup').addEventListener('click', signup);
 });
 
-const API_BASE_URL = await chargerApiUrl();
-const WEB_BASE_URL = await chargerSiteUrl();
-const API_ENDPOINT = "/signup";
-const WEB_ENDPOINT = "/pages/profile.html";
+
 
 async function signup() {
+
+    const API_BASE_URL = await chargerApiUrl();
+    const WEB_BASE_URL = await chargerSiteUrl();
+    const API_ENDPOINT = "/signup";
+    const WEB_ENDPOINT = "/pages/login.html";
 
     let tbUserName = document.getElementById("tb-username");
     let tbPassword = document.getElementById("tb-password");
@@ -18,7 +20,6 @@ async function signup() {
 
     let userName = tbUserName.value;
     let passHash = CryptoJS.MD5(tbPassword.value);
-
     let endpoint = `${API_BASE_URL}${API_ENDPOINT}/${userName}/${passHash}`;
 
     if (userName === "" || passHash === "") {

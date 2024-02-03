@@ -1,4 +1,4 @@
-package ch.heig.Potion;
+package ch.heig.Item;
 
 public enum PotionType {
     REDUCTO,     // Potion de réduction du temps de pousse d'une plante

@@ -1,0 +1,20 @@
+
+
+#garden {
+    display: flex; /* Utilisez flex pour créer un flow panel */
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
+    gap: 10px; /* Espacement entre les éléments */
+}
+
+
+
+.plant {
+    border: 1px solid black; /* Bordure pour chaque plante */
+    padding: 5px; /* Espacement interne */
+    margin: 5px; /* Espacement externe */
+    flex-basis: 10%; /* Base pour chaque élément, ajustez selon la taille souhaitée */
+}
+
+.plant img {
+    width: 100%; /* Ajustez la taille de l'image */
+}
