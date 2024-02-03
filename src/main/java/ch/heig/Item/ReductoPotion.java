@@ -1,4 +1,4 @@
-package ch.heig.Potion;
+package ch.heig.Item;
 
 import ch.heig.Garden.Plant;
 
@@ -9,7 +9,7 @@ public class ReductoPotion extends Potion {
 
     // region ctor
     public ReductoPotion() {
-        super(10.0);
+        //super(10.0);
     }
     // endregion
 

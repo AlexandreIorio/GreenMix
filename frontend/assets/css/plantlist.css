@@ -1,0 +1,11 @@
+.col-left{
+    text-align: left;
+}
+
+.col-center{
+    text-align: center;
+}
+
+.col-left, .col-center{
+margin: 5px;
+}
