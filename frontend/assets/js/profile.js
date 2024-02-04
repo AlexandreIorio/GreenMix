@@ -1,12 +1,14 @@
 import { chargerApiUrl } from './utils.js';
+import { getProfile } from './utils.js';
 
-document.addEventListener('DOMContentLoaded', SetValues);
+document.addEventListener('DOMContentLoaded', async function () {
+    await SetValues(getProfile());
+});
+
 document.getElementById("btn-add-space").addEventListener("click", addSpace);
 
 window.update = async function() {
     await SetValues();
-    let iframe = document.getElementById('garden');
-    iframe.contentWindow.update();
 };
 
 async function SetValues() {
@@ -29,12 +31,15 @@ async function SetValues() {
         const data = await response.json(); // Attendre la résolution de la promesse JSON
 
         document.getElementById("username").innerHTML = data.username;
-        document.getElementById("wallet-amount").innerHTML = data.wallet;
-        document.getElementById("xp-amount").innerHTML = `${data.xp} XP`;
+        document.getElementById("wallet-amount").innerHTML = new Intl.NumberFormat().format(data.wallet);
+        document.getElementById("xp-amount").innerHTML = `${new Intl.NumberFormat().format(data.xp)} XP`;
         document.getElementById("level-amount").innerHTML = `Level ${data.level}`;
+
         let progressXp = Math.round(((data.xp - data.currentLevelXp) / (data.nextLevelXp - data.currentLevelXp))*100);
-        document.getElementById("progress-bar").style.width = `${progressXp}%`;
-        document.getElementById("progress-bar-text").innerHTML = `${data.xp - data.currentLevelXp} / ${data.nextLevelXp - data.currentLevelXp} XP : ${progressXp}%`;
+        document.getElementById("progress-bar-value").style.width = `${progressXp}%`;
+        let currentLevelXp = new Intl.NumberFormat().format(data.xp - data.currentLevelXp);
+        let nextLevelXp = new Intl.NumberFormat().format(data.nextLevelXp - data.currentLevelXp);
+        document.getElementById("progress-bar-text").innerHTML = `${currentLevelXp} / ${nextLevelXp} XP : ${progressXp}%`;
         document.getElementById("btn-add-space").innerHTML = "Ajouter un espace pour " + data.spacePrice + "$";
 
     } catch (error) {

@@ -1,11 +1,12 @@
-.col-left{
-    text-align: left;
+@import "font.css";
+@import "button.css";
+.button{
+    width: 21em;
 }
 
-.col-center{
-    text-align: center;
-}
-
-.col-left, .col-center{
-margin: 5px;
+.details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

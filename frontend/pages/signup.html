@@ -1,49 +1,33 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign in</title>
-        <link rel="stylesheet" href="../assets/css/style.css">
-    </head>
-    <body>
-        <h1>Inscription</h1>
-        <table>
-            <tr>
-                <td>
-                    <label for="tb-username">Username</label>
-                </td>
-                <td>
-                    <input type="text" id="tb-username">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="tb-password">Password</label>
-                </td>
-                <td>
-                    <input type="password" id="tb-password">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="tb-password-confirm">Confirm password</label>
-                </td>
-                <td>
-                    <input type="password" id="tb-password-confirm">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <span id="error-message"></span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button id="btn-signup" onclick="signin()">Sign up</button>
-                </td>
-            </tr>
-        </table>
-        <script type="module" src="../assets/js/signup.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="../assets/css/signup.css">
+</head>
+<body>
+<div class="panel">
+    <div class="panel-container">
+        <img class="panel-img" alt="panel"/>
+        <div class="panel-title text">Inscription</div>
+        <div class="panel-input-container">
+            <label class=" text" for="tb-username">Nom d'utilisateur</label>
+            <input class="panel-input input text" type="text" id="tb-username">
+            <label class="text" for="tb-password">Password</label>
+            <input class="panel-input input text" type="password" id="tb-password">
+            <label class="text" for="tb-password-confirm">Confirmation du password</label>
+            <input class="panel-input input text" type="password" id="tb-password-confirm">
+            <div class="panel-button-container">
+                <button class="panel-button button text" id="btn-signup">S'inscrire</button>
+                <button class="panel-button button text" id="btn-login">se connecter</button>
+            </div>
+        </div>
+    </div>
+    <p id="error-message"></p>
+</div>
+
+
+<script type="module" src="../assets/js/signup.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+</body>

@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login</title>
-        <link rel="stylesheet" href="../assets/css/style.css">
-    </head>
-    <body>
-        <h1>Login</h1>
-        <table>
-            <tr>
-                <td>
-                    <label>Login</label>
-                </td>
-                <td>
-                    <input type="text" id="tb-username">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Password</label>
-                </td>
-                <td>
-                    <input type="password" id="tb-password">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button id="btn-login">Se connecter</button>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p id="error-message"></p>
-                </td>
-        </table>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/login.css">
 
-        <script  src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-        <script type="module"  src="../assets/js/login.js"></script>
-    </body>
+</head>
+<body>
+<div class="panel">
+    <div class="panel-container">
+        <img class="panel-img" alt="panel"/>
+        <div class="panel-title text">Login</div>
+        <div class="panel-input-container">
+            <label class=" text" for="tb-username">Login</label>
+            <input class="panel-input input text" type="text" id="tb-username">
+            <label class="text" for="tb-password">Password</label>
+            <input class="panel-input input text" type="password" id="tb-password">
+            <button class="panel-button button text" id="btn-login">Login</button>
+        </div>
+    </div>
+    <p id="error-message"></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="module" src="../assets/js/login.js"></script>
+</body>
 </html>

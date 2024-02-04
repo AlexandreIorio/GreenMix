@@ -2,13 +2,13 @@ import {chargerApiUrl} from './utils.js';
 import {chargerSiteUrl} from './utils.js';
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelector('button#btn-login').addEventListener('click', login);
+    document.getElementById("btn-login").addEventListener("click", login);
 });
 
 let API_BASE_URL = await chargerApiUrl();
 let WEB_BASE_URL = await chargerSiteUrl();
 const API_ENDPOINT = "/connect";
-const WEB_ENDPOINT = "/pages/profile.html";
+const WEB_ENDPOINT = "/pages/dashboard.html";
 
 async function login() {
     let tbUserName = document.getElementById("tb-username")

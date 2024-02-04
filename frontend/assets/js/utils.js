@@ -25,3 +25,16 @@ export async function chargerSiteUrl() {
         return ""; // Retourner une chaîne vide en cas d'erreur
     }
 }
+
+export async function getProfile() {
+    let API_BASE_URL = await chargerApiUrl();
+    try {
+        let response = await fetch(`${API_BASE_URL}/profile`, {credentials: 'include'});
+        let profile = await response.json();
+        return profile;
+    } catch (error) {
+        window.location.href = await chargerSiteUrl() + "pages/unauthorised.html";
+        console.error('Error fetching the profile data:', error);
+    }
+
+}

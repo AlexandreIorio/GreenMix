@@ -12,28 +12,61 @@ async function fillTableWithData() {
             plantsData.forEach(plant => {
                 let row = tableBody.insertRow();
                 let cellName = row.insertCell();
-                    cellName.textContent = plant.name;
-                    cellName.className = "col-left";
-                    let cellDuration = row.insertCell();
-                    cellDuration.textContent = plant.duration + "s";
-                    cellDuration.className = "col-center";
-                    let cellHavrvest = row.insertCell();
-                    cellHavrvest.textContent = plant.harvest;
-                    cellHavrvest.className = "col-center";
-                    let cellBuy = row.insertCell();
-                    cellBuy.textContent = plant.purchasePrice+ "\t$";
-                    cellBuy.className = "col-center" ;
-                    let cellSell = row.insertCell();
-                    cellSell.textContent = plant.sellingPrice+ "\t$";
-                    cellSell.className = "col-center";
+                let cell = row.insertCell();
+                cell.classList.add('button');
+                let container = document.createElement('div');
+                let name = document.createElement('div');
 
-                    let cellButton = row.insertCell();
-                    let button = document.createElement("button");
-                    button.setAttribute('data-name', plant.name);
-                    button.textContent = "planter";
-                    button.className = "col-right";
-                    button.addEventListener("click", grow);
-                    cellButton.appendChild(button);
+                let details = document.createElement('div');
+                details.className = "details";
+                let detailsTable = document.createElement('table');
+                let detailsRow = document.createElement('tr');
+                let durationCell = document.createElement('td');
+                let harvestCell = document.createElement('td');
+                let buyCell = document.createElement('td');
+                let sellCell = document.createElement('td');
+
+                name.textContent = plant.name;
+
+                durationCell.textContent = plant.duration + "s";
+                harvestCell.textContent = plant.harvest + " buds";
+                buyCell.textContent = "Achat :"+plant.purchasePrice + " $";
+                sellCell.textContent = "Vente :"+plant.sellingPrice + " $";
+                container.appendChild(name);
+                container.appendChild(details);
+                details.appendChild(detailsTable);
+                detailsTable.appendChild(detailsRow);
+                detailsRow.appendChild(durationCell);
+                detailsRow.appendChild(harvestCell);
+                detailsRow.appendChild(buyCell);
+                detailsRow.appendChild(sellCell);
+                cell.appendChild(container);
+                cell.setAttribute('data-name', plant.name);
+                cell.addEventListener("click", grow);
+
+
+                    // cellName.textContent = plant.name;
+                    // cellName.className = "col-left";
+                    // let cellDuration = row.insertCell();
+                    // cellDuration.textContent = plant.duration + "s";
+                    // cellDuration.className = "col-center";
+                    // let cellHavrvest = row.insertCell();
+                    // cellHavrvest.textContent = plant.harvest;
+                    // cellHavrvest.className = "col-center";
+                    // let cellBuy = row.insertCell();
+                    // cellBuy.textContent = plant.purchasePrice+ "\t$";
+                    // cellBuy.className = "col-center" ;
+                    // let cellSell = row.insertCell();
+                    // cellSell.textContent = plant.sellingPrice+ "\t$";
+                    // cellSell.className = "col-center";
+                    //
+                    // let cellButton = row.insertCell();
+                    // let button = document.createElement("button");
+                    // button.setAttribute('data-name', plant.name);
+                    // button.textContent = "planter";
+                    // button.className = "col-right";
+                    // button.addEventListener("click", grow);
+                    // cellButton.appendChild(button);
 
 
             });

@@ -1,20 +1,36 @@
+@import "font.css";
 
-
-#garden {
-    display: flex; /* Utilisez flex pour créer un flow panel */
-    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
-    gap: 10px; /* Espacement entre les éléments */
+.plant, .plant-harvest {
+    display: inline-table;
+    text-align: center;
+    width: 10em;
+    border-radius: 15px;
+    border: #383838 5px solid;
+    background-color: rgba(189, 189, 189, 0.9);
+    padding: 5px;
+    margin: 5px;
+    box-shadow: #383838 5px 5px 10px;
 }
 
+.plant-harvest {
+    box-shadow: #4caf50 0px 0px 5px 5px;
+}
 
-
-.plant {
-    border: 1px solid black; /* Bordure pour chaque plante */
-    padding: 5px; /* Espacement interne */
-    margin: 5px; /* Espacement externe */
-    flex-basis: 10%; /* Base pour chaque élément, ajustez selon la taille souhaitée */
+.plant:active {
+    box-shadow: rgba(0,0,0,0) 0px 0px 0px;
+    transition: 0.2s;
 }
 
 .plant img {
-    width: 100%; /* Ajustez la taille de l'image */
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px 5px black;
+    width: 100%;
 }
+
+.plant-name {
+
+}
+
+
+
+
